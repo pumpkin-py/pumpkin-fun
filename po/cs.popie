@@ -39,3 +39,15 @@ msgstr Jazyky
 
 msgid Categories
 msgstr Kategorie
+
+msgid Unlucky (E{sad})
+msgstr Smůla  (E{sad})
+
+msgid I have no information (E{sad})
+msgstr Žádné informace nemám ((emoji.sad))
+
+msgid gave / got
+msgstr rozdáno / získáno
+
+msgid {gave} / {got}
+msgstr {gave} / {got}
