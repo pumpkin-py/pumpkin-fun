@@ -27,9 +27,9 @@ class Relation(database.base):
 
     @staticmethod
     def add(guild_id: int, sender_id: int, receiver_id: int, action: str) -> Relation:
-        """Add new verify group.
+        """Add new relation.
 
-        :return: New group.
+        :return: Relation.
         """
         relation = Relation(
             guild_id=guild_id,
