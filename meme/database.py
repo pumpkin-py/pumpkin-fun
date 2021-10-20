@@ -11,14 +11,10 @@ from .enums import VerifyStatus
 
 
 class Relation(database.base):
-    """Verify group.
+    """Relation.
 
-    Groups map e-mail domains to roles.
-    To add some role everytime set the :attr:`role_id` parameter to ``0``.
-    To block some domain from being used set the :attr:`role_id` parameter to ``-1``.
-
-    When imported, old groups are deleted and the new ones are added one-by-one:
-    ordering matters.
+    Handles all relations between users.
+    
     """
 
     __tablename__ = "fun_meme_relations"
