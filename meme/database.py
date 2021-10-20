@@ -62,9 +62,9 @@ class Relation(database.base):
                 action=action
             )
             .count()
-            
-        return gave, got
         )
+        
+        return gave, got
 
         
     def save(self):
