@@ -43,7 +43,7 @@ class Relation(database.base):
 
         return relation
         
-    def get_user_relation(guild_id: int, user_id: int, action: str) -> Tuple[int, int]
+    def get_user_relation(guild_id: int, user_id: int, action: str) -> Tuple[int, int]:
         
         gave = (
             session.query(Relation)
