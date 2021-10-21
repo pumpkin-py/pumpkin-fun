@@ -305,7 +305,7 @@ class Meme(commands.Cog):
             description=_(ctx, "gave / got")
         )
 
-        avatar_url: str = dc_member.display_avatar.replace(size=256).url
+        avatar_url: str = user.display_avatar.replace(size=256).url
         embed.set_thumbnail(url=avatar_url)
 
         for action in actions:
