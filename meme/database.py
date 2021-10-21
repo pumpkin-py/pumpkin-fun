@@ -45,24 +45,21 @@ class Relation(database.base):
         
     def get_user_relation(guild_id: int, user_id: int, action: str) -> Tuple[int, int]:
         
-        gave = (
-            session.query(Relation)
-            .filter_by(
-                guild_id=guild_id,
-                sender_id=user_id,
-                action=action
-            )
-            .count()
+        gave =  session.query(Relation)
+                .filter_by(
+                    guild_id=guild_id,
+                    sender_id=user_id,
+                    action=action
+                )
+                .count()
             
-        got = (
-            session.query(Relation)
-            .filter_by(
-                guild_id=guild_id,
-                receiver_id=user_id,
-                action=action
-            )
-            .count()
-        )
+        got =   session.query(Relation)
+                .filter_by(
+                    guild_id=guild_id,
+                    receiver_id=user_id,
+                    action=action
+                )
+                .count()
         
         return gave, got
 
