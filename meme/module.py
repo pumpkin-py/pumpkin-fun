@@ -301,7 +301,7 @@ class Meme(commands.Cog):
             
         embed = utils.Discord.create_embed(
             author=ctx.author,
-            title=_(ctx, "Whois"),
+            title=_(ctx, "Relations"),
             description=_(ctx, "gave / got")
         )
 
@@ -311,8 +311,8 @@ class Meme(commands.Cog):
         for action in actions:
             lookup = Relation.get_user_relation(ctx.guild.id, user.id, action)
 
-            if lookup[0] == 0 and lookup[1] == 0:
-                continue
+            #if lookup[0] == 0 and lookup[1] == 0:
+            #    continue
 
             value = _(
                         ctx,
