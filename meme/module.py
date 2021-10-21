@@ -403,7 +403,7 @@ class Meme(commands.Cog):
         for i in range(14):
             img = "%02d" % (i + 1)
             frame = Image.new("RGBA", (width, height), (54, 57, 63, 1))
-            hand = Image.open(f"data/pet/{img}.png")
+            hand = Image.open(f"modules/meme/data/pet/{img}.png")
             frame.paste(frame_avatar, (35, 25 + vertical_offset[i]), frame_avatar)
             frame.paste(hand, (10, 5), hand)
             frames.append(frame)
@@ -427,7 +427,7 @@ class Meme(commands.Cog):
 
             img = "%02d" % (i + 1)
             frame = Image.new("RGBA", (width, height), (54, 57, 63, 1))
-            hand = Image.open(f"data/hyperpet/{img}.png")
+            hand = Image.open(f"modules/meme/data/hyperpet/{img}.png")
             frame.paste(frame_avatar, (35, 25 + vertical_offset[i]), frame_avatar)
             frame.paste(hand, (10, 5), hand)
             frames.append(frame)
@@ -446,7 +446,7 @@ class Meme(commands.Cog):
         for i in range(8):
             img = "%02d" % (i + 1)
             frame = Image.new("RGBA", (width, height), (54, 57, 63, 1))
-            bat = Image.open(f"data/bonk/{img}.png")
+            bat = Image.open(f"modules/meme/data/bonk/{img}.png")
 
             frame_avatar = avatar.resize((100, 100 - deformation[i]))
 
@@ -469,7 +469,7 @@ class Meme(commands.Cog):
         for i in range(26):
             img = "%02d" % (i + 1)
             frame = Image.new("RGBA", (width, height), (54, 57, 63, 1))
-            whip_frame = Image.open(f"data/whip/{img}.png").resize((150, 150))
+            whip_frame = Image.open(f"modules/meme/data/whip/{img}.png").resize((150, 150))
 
             frame_avatar = avatar.resize((100 - deformation[i], 100))
 
@@ -491,7 +491,7 @@ class Meme(commands.Cog):
         for i in range(8):
             img = "%02d" % (i + 1)
             frame = Image.new("RGBA", (width, height), (54, 57, 63, 1))
-            spoon = Image.open(f"data/spank/{img}.png").resize((100, 100))
+            spoon = Image.open(f"modules/meme/data/spank/{img}.png").resize((100, 100))
 
             frame_avatar = avatar.resize((100 + 2 * deformation[i], 100 + 2 * deformation[i]))
 
