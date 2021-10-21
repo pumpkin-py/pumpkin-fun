@@ -10,12 +10,11 @@ from pathlib import Path
 
 import discord
 from discord.ext import commands
-from discord.utils import get
 
 import database.config
-from core import check,utils, i18n
+from core import utils, i18n
 
-from .database import Relation, HugEmote
+from .database import Relation
 from .image_utils import ImageUtils
 
 _ = i18n.Translator("modules/fun").translate
@@ -26,24 +25,6 @@ data_dir = "{path}/data".format(path=os.path.realpath(os.path.join(os.getcwd(), 
 class Meme(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        
-    @commands.guild_only()
-    @commands.check(check.acl)
-    @commands.command()
-    async def sethugger(self, ctx, emoji: Union[discord.Emoji, str]):
-        name: str = str(getattr(emoji, "name", emoji))
-        
-        emoji = get(ctx.guild.emojis, name=name)
-        
-        HugEmote.change(ctx.guild.id, name)
-        
-        await ctx.reply(
-            "{emoji} is the new hug emote!".format(
-                emoji=emoji
-            ),
-            mention_author=False,
-        )
-
         
     @commands.guild_only()
     @commands.cooldown(rate=5, per=20.0, type=commands.BucketType.user)
@@ -64,21 +45,13 @@ class Meme(commands.Cog):
             Relation.add(ctx.guild.id, hugger.id, None, "hug")
         else:
             Relation.add(ctx.guild.id, hugger.id, hugged.id, "hug")
-            
-        hug_emote = HugEmote.get(ctx.guild.id)
-        
-        emoji = None
-        
-        if hug_emote is not None:
-            emoji = get(ctx.guild.emojis, name=hug_emote.emote)
-            
-        if emoji is None:
-            emoji = "(⊃・﹏・)⊃"
 
         await ctx.send(
-            "{emoji} **{hugged}**".format(
-                emoji=emoji,
-                hugged=hugged.display_name
+            "(⊃・﹏・)⊃"
+            + (
+                " ***" + hugged.display_name + "***"
+                if type(hugged) == discord.Role
+                else " **" + hugged.name + "**"
             )
         )
 
