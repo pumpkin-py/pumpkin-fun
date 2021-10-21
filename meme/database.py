@@ -49,15 +49,13 @@ class Relation(database.base):
                     guild_id=guild_id,
                     sender_id=user_id,
                     action=action
-                )
-                .count()
+                ).count()
             
         got = session.query(Relation).filter_by(
                     guild_id=guild_id,
                     receiver_id=user_id,
                     action=action
-                )
-                .count()
+                ).count()
         
         return gave, got
 
