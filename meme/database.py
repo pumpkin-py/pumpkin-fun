@@ -7,8 +7,6 @@ from sqlalchemy import BigInteger, Column, DateTime, Integer, String
 
 from database import database, session
 
-from .enums import VerifyStatus
-
 
 class Relation(database.base):
     """Relation.
