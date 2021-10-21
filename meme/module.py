@@ -13,7 +13,7 @@ import database.config
 from core import utils, i18n
 
 from .database import Relation
-import .image_utils
+from .image_utils import ImageUtils
 
 _ = i18n.Translator("modules/fun").translate
 config = database.config.Config.get()
