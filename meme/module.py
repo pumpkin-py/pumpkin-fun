@@ -69,7 +69,7 @@ class Meme(commands.Cog):
             response = requests.get(url)
             avatar = Image.open(BytesIO(response.content)).convert("RGBA")
 
-            frames = self.get_whip_frames(avatar)
+            frames = Meme.get_whip_frames(avatar)
 
             with BytesIO() as image_binary:
                 frames[0].save(
@@ -110,7 +110,7 @@ class Meme(commands.Cog):
             response = requests.get(url)
             avatar = Image.open(BytesIO(response.content)).convert("RGBA")
 
-            frames = self.get_spank_frames(avatar)
+            frames = Meme.get_spank_frames(avatar)
 
             with BytesIO() as image_binary:
                 frames[0].save(
@@ -152,7 +152,7 @@ class Meme(commands.Cog):
             response = requests.get(url)
             avatar = Image.open(BytesIO(response.content)).convert("RGBA")
 
-            frames = self.get_pet_frames(avatar)
+            frames = Meme.get_pet_frames(avatar)
 
             with BytesIO() as image_binary:
                 frames[0].save(
@@ -194,7 +194,7 @@ class Meme(commands.Cog):
             response = requests.get(url)
             avatar = Image.open(BytesIO(response.content)).convert("RGBA")
 
-            frames = self.get_hyperpet_frames(avatar)
+            frames = Meme.get_hyperpet_frames(avatar)
 
             with BytesIO() as image_binary:
                 frames[0].save(
@@ -236,7 +236,7 @@ class Meme(commands.Cog):
             response = requests.get(url)
             avatar = Image.open(BytesIO(response.content)).convert("RGBA")
 
-            frames = self.get_bonk_frames(avatar)
+            frames = Meme.get_bonk_frames(avatar)
 
             with BytesIO() as image_binary:
                 frames[0].save(
