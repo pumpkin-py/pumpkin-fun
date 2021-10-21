@@ -65,7 +65,7 @@ class Meme(commands.Cog):
         Relation.add(ctx.guild.id, "whip", whipper.id, whipped.id)
 
         async with ctx.typing():
-            url = whipped.avatar_url_as(format="jpg")
+            url = whipped.display_avatar.replace(size=256).url
             response = requests.get(url)
             avatar = Image.open(BytesIO(response.content)).convert("RGBA")
 
@@ -106,7 +106,7 @@ class Meme(commands.Cog):
         Relation.add(ctx.guild.id, "spank", spanker.id, spanked.id)
 
         async with ctx.typing():
-            url = spanked.avatar_url_as(format="jpg")
+            url = spanked.display_avatar.replace(size=256).url
             response = requests.get(url)
             avatar = Image.open(BytesIO(response.content)).convert("RGBA")
 
@@ -148,7 +148,7 @@ class Meme(commands.Cog):
         Relation.add(ctx.guild.id, "pet", petter.id, petted.id)
 
         async with ctx.typing():
-            url = petted.avatar_url_as(format="jpg")
+            url = petted.display_avatar.replace(size=256).url
             response = requests.get(url)
             avatar = Image.open(BytesIO(response.content)).convert("RGBA")
 
@@ -190,7 +190,7 @@ class Meme(commands.Cog):
         Relation.add(ctx.guild.id, "hyperpet", petter.id, petted.id)
 
         async with ctx.typing():
-            url = petted.avatar_url_as(format="jpg")
+            url = petted.display_avatar.replace(size=256).url
             response = requests.get(url)
             avatar = Image.open(BytesIO(response.content)).convert("RGBA")
 
@@ -232,7 +232,7 @@ class Meme(commands.Cog):
         Relation.add(ctx.guild.id, "bonk", bonker.id, bonked.id)
 
         async with ctx.typing():
-            url = bonked.avatar_url_as(format="jpg")
+            url = bonked.display_avatar.replace(size=256).url
             response = requests.get(url)
             avatar = Image.open(BytesIO(response.content)).convert("RGBA")
 
