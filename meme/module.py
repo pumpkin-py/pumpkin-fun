@@ -10,7 +10,7 @@ from discord.ext import commands
 
 from core import utils, i18n
 
-from .database import
+from .database import Relation
 
 _ = i18n.Translator("modules/fun").translate
 config = database.config.Config.get()
