@@ -8,6 +8,7 @@ from typing import List, Union
 import discord
 from discord.ext import commands
 
+import database.config
 from core import utils, i18n
 
 from .database import Relation
