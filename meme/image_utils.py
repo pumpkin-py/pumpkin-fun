@@ -98,9 +98,9 @@ class ImageUtils:
 
     def shift_hue(arr, hout):
         arr = np.array(arr)
-        hsv = rgb_to_hsv(arr)
+        hsv = self.rgb_to_hsv(arr)
         hsv[..., 0] = hout
-        rgb = hsv_to_rgb(hsv)
+        rgb = self.hsv_to_rgb(hsv)
         return rgb
 
 
