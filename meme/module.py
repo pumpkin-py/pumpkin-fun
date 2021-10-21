@@ -42,9 +42,9 @@ class Meme(commands.Cog):
             hugged = user
 
         if type(hugged) == discord.Role:
-            Relation.add(ctx.guild.id, "hug", hugger.id, None)
+            Relation.add(ctx.guild.id, hugger.id, None, "hug")
         else:
-            Relation.add(ctx.guild.id, "hug", hugger.id, hugged.id)
+            Relation.add(ctx.guild.id, hugger.id, hugged.id, "hug")
 
         await ctx.send(
             "(⊃・﹏・)⊃"
@@ -67,7 +67,7 @@ class Meme(commands.Cog):
             whipper = ctx.author
             whipped = user
 
-        Relation.add(ctx.guild.id, "whip", whipper.id, whipped.id)
+        Relation.add(ctx.guild.id, whipper.id, whipped.id, "whip")
 
         async with ctx.typing():
             url = whipped.display_avatar.replace(size=256).url
@@ -108,7 +108,7 @@ class Meme(commands.Cog):
             spanker = ctx.author
             spanked = user
 
-        Relation.add(ctx.guild.id, "spank", spanker.id, spanked.id)
+        Relation.add(ctx.guild.id, spanker.id, spanked.id, "spank")
 
         async with ctx.typing():
             url = spanked.display_avatar.replace(size=256).url
@@ -150,7 +150,7 @@ class Meme(commands.Cog):
             petter = ctx.author
             petted = member
 
-        Relation.add(ctx.guild.id, "pet", petter.id, petted.id)
+        Relation.add(ctx.guild.id, petter.id, petted.id, "pet")
 
         async with ctx.typing():
             url = petted.display_avatar.replace(size=256).url
@@ -192,7 +192,7 @@ class Meme(commands.Cog):
             petter = ctx.author
             petted = member
 
-        Relation.add(ctx.guild.id, "hyperpet", petter.id, petted.id)
+        Relation.add(ctx.guild.id, petter.id, petted.id, "hyperpet")
 
         async with ctx.typing():
             url = petted.display_avatar.replace(size=256).url
@@ -234,7 +234,7 @@ class Meme(commands.Cog):
             bonker = ctx.author
             bonked = member
 
-        Relation.add(ctx.guild.id, "bonk", bonker.id, bonked.id)
+        Relation.add(ctx.guild.id, bonker.id, bonked.id, "bonk")
 
         async with ctx.typing():
             url = bonked.display_avatar.replace(size=256).url
@@ -278,7 +278,7 @@ class Meme(commands.Cog):
 
         options = ["つ", "づ", "ノ"]
 
-        Relation.add(ctx.guild.id, "slap", slapper.id, slapped.id)
+        Relation.add(ctx.guild.id, slapper.id, slapped.id, "slap")
 
         await ctx.reply(
             "**{}**{} {}".format(
