@@ -1,3 +1,4 @@
+import os
 import random
 import requests
 import numpy as np
@@ -18,7 +19,7 @@ from .image_utils import ImageUtils
 _ = i18n.Translator("modules/fun").translate
 config = database.config.Config.get()
 actions = ("hug", "pet", "hyperpet", "slap", "spank", "whip", "bonk")
-data_dir = Path(__name__) / "modules" / "fun" / "meme" / "data"
+data_dir = "{path}/data".format(path=os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__))))
 
 class Meme(commands.Cog):
     def __init__(self, bot):
