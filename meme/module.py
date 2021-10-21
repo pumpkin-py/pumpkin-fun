@@ -69,7 +69,7 @@ class Meme(commands.Cog):
             response = requests.get(url)
             avatar = Image.open(BytesIO(response.content)).convert("RGBA")
 
-            frames = Meme.get_whip_frames(avatar)
+            frames = self.get_whip_frames(avatar)
 
             with BytesIO() as image_binary:
                 frames[0].save(
@@ -110,7 +110,7 @@ class Meme(commands.Cog):
             response = requests.get(url)
             avatar = Image.open(BytesIO(response.content)).convert("RGBA")
 
-            frames = Meme.get_spank_frames(avatar)
+            frames = self.get_spank_frames(avatar)
 
             with BytesIO() as image_binary:
                 frames[0].save(
@@ -152,7 +152,7 @@ class Meme(commands.Cog):
             response = requests.get(url)
             avatar = Image.open(BytesIO(response.content)).convert("RGBA")
 
-            frames = Meme.get_pet_frames(avatar)
+            frames = self.get_pet_frames(avatar)
 
             with BytesIO() as image_binary:
                 frames[0].save(
@@ -194,7 +194,7 @@ class Meme(commands.Cog):
             response = requests.get(url)
             avatar = Image.open(BytesIO(response.content)).convert("RGBA")
 
-            frames = Meme.get_hyperpet_frames(avatar)
+            frames = self.get_hyperpet_frames(avatar)
 
             with BytesIO() as image_binary:
                 frames[0].save(
@@ -236,7 +236,7 @@ class Meme(commands.Cog):
             response = requests.get(url)
             avatar = Image.open(BytesIO(response.content)).convert("RGBA")
 
-            frames = Meme.get_bonk_frames(avatar)
+            frames = self.get_bonk_frames(avatar)
 
             with BytesIO() as image_binary:
                 frames[0].save(
@@ -398,7 +398,7 @@ class Meme(commands.Cog):
         width, height = 148, 148
         vertical_offset = (0, 0, 0, 0, 1, 2, 3, 4, 5, 4, 3, 2, 2, 1, 0)
 
-        frame_avatar = image_utils.round_image(avatar.resize((100, 100)))
+        frame_avatar = utils.Image.round_image(avatar.resize((100, 100)))
 
         for i in range(14):
             img = "%02d" % (i + 1)
@@ -417,13 +417,13 @@ class Meme(commands.Cog):
         width, height = 148, 148
         vertical_offset = (0, 1, 2, 3, 1, 0)
 
-        avatar = image_utils.round_image(avatar.resize((100, 100)))
+        avatar = utils.Image.round_image(avatar.resize((100, 100)))
         avatar_pixels = np.array(avatar)
         git_hash = int(utils.git_get_hash(), 16)
 
         for i in range(6):
             deform_hue = git_hash % 100 ** (i + 1) // 100 ** i / 100
-            frame_avatar = Image.fromarray(image_utils.shift_hue(avatar_pixels, deform_hue))
+            frame_avatar = Image.fromarray(utils.Image.shift_hue(avatar_pixels, deform_hue))
 
             img = "%02d" % (i + 1)
             frame = Image.new("RGBA", (width, height), (54, 57, 63, 1))
@@ -441,7 +441,7 @@ class Meme(commands.Cog):
         width, height = 200, 170
         deformation = (0, 0, 0, 5, 10, 20, 15, 5)
 
-        avatar = image_utils.round_image(avatar.resize((100, 100)))
+        avatar = utils.Image.round_image(avatar.resize((100, 100)))
 
         for i in range(8):
             img = "%02d" % (i + 1)
@@ -464,7 +464,7 @@ class Meme(commands.Cog):
         deformation = (0, 0, 0, 0, 0, 0, 0, 0, 2, 3, 5, 9, 6, 4, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
         translation = (0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 2, 3, 3, 3, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 
-        avatar = image_utils.round_image(avatar.resize((100, 100)))
+        avatar = utils.Image.round_image(avatar.resize((100, 100)))
 
         for i in range(26):
             img = "%02d" % (i + 1)
@@ -486,7 +486,7 @@ class Meme(commands.Cog):
         width, height = 200, 120
         deformation = (4, 2, 1, 0, 0, 0, 0, 3)
 
-        avatar = image_utils.round_image(avatar.resize((100, 100)))
+        avatar = utils.Image.round_image(avatar.resize((100, 100)))
 
         for i in range(8):
             img = "%02d" % (i + 1)
