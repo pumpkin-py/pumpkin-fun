@@ -50,6 +50,7 @@ class ImageUtils:
 
     # Taken from https://stackoverflow.com/a/7274986
     # unutbu, September 2011 (https://stackoverflow.com/users/190597/unutbu)
+    @staticmethod
     def rgb_to_hsv(rgb):
         # Translated from source of colorsys.rgb_to_hsv
         # r,g,b should be a numpy arrays with values between 0 and 255
@@ -74,7 +75,7 @@ class ImageUtils:
         hsv[..., 0] = (hsv[..., 0] / 6.0) % 1.0
         return hsv
 
-
+    @staticmethod
     def hsv_to_rgb(hsv):
         # Translated from source of colorsys.hsv_to_rgb
         # h,s should be a numpy arrays with values between 0.0 and 1.0
@@ -98,9 +99,9 @@ class ImageUtils:
 
     def shift_hue(arr, hout):
         arr = np.array(arr)
-        hsv = self.rgb_to_hsv(arr)
+        hsv = ImageUtils.rgb_to_hsv(arr)
         hsv[..., 0] = hout
-        rgb = self.hsv_to_rgb(hsv)
+        rgb = ImageUtils.hsv_to_rgb(hsv)
         return rgb
 
 
