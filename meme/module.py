@@ -1,6 +1,7 @@
 import os
 import random
 import requests
+import git
 import numpy as np
 from io import BytesIO
 from PIL import Image, ImageDraw
@@ -423,7 +424,7 @@ class Meme(commands.Cog):
 
         avatar = ImageUtils.round_image(avatar.resize((100, 100)))
         avatar_pixels = np.array(avatar)
-        git_hash = int(utils.git_get_hash(), 16)
+        git_hash = int(git_get_hash(), 16)
 
         for i in range(6):
             deform_hue = git_hash % 100 ** (i + 1) // 100 ** i / 100
@@ -504,6 +505,11 @@ class Meme(commands.Cog):
             frames.append(frame)
 
         return frames
+        
+    def git_get_hash():
+        repo = git.Repo(search_parent_directories=True)
+        return repo.head.object.hexsha
+
 
 def setup(bot) -> None:
     bot.add_cog(Meme(bot))
