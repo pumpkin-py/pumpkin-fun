@@ -29,7 +29,7 @@ class Meme(commands.Cog):
     @commands.guild_only()
     @commands.cooldown(rate=5, per=20.0, type=commands.BucketType.user)
     @commands.command()
-    async def hug(self, ctx, *, user: discord.Member = None):
+    async def hug(self, ctx, *, user: Union[discord.Member, discord.Role] = None):
         """Hug someone!
 
         target: Discord user or role. If none, the bot will hug you.
@@ -45,14 +45,11 @@ class Meme(commands.Cog):
             Relation.add(ctx.guild.id, hugger.id, None, "hug")
         else:
             Relation.add(ctx.guild.id, hugger.id, hugged.id, "hug")
-
+            
+        border: str = "***" if type(hugged) == discord.Role else "**"
+        
         await ctx.send(
-            "(⊃・﹏・)⊃"
-            + (
-                " ***" + hugged.display_name + "***"
-                if type(hugged) == discord.Role
-                else " **" + hugged.name + "**"
-            )
+            "(⊃・﹏・)⊃" + f" {border}{hugged.name}{border}"
         )
 
     @commands.guild_only()
@@ -311,8 +308,8 @@ class Meme(commands.Cog):
         for action in actions:
             lookup = Relation.get_user_relation(ctx.guild.id, user.id, action)
 
-            #if lookup[0] == 0 and lookup[1] == 0:
-            #    continue
+            if lookup[0] == 0 and lookup[1] == 0:
+                continue
 
             value = _(
                         ctx,

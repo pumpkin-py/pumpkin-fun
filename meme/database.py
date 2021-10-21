@@ -10,9 +10,7 @@ from database import database, session
 
 class Relation(database.base):
     """Relation.
-
     Handles all relations between users.
-    
     """
 
     __tablename__ = "fun_meme_relations"
