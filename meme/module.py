@@ -47,7 +47,7 @@ class Meme(commands.Cog):
             Relation.add(ctx.guild.id, "hug", hugger.id, hugged.id)
 
         await ctx.send(
-            emote.hug_right
+            "(⊃・﹏・)⊃"
             + (
                 " ***" + hugged.display_name + "***"
                 if type(hugged) == discord.Role
