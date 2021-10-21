@@ -4,6 +4,7 @@ import numpy as np
 from io import BytesIO
 from PIL import Image, ImageDraw
 from typing import List, Union
+from pathlib import Path
 
 import discord
 from discord.ext import commands
@@ -12,10 +13,12 @@ import database.config
 from core import utils, i18n
 
 from .database import Relation
+import .image_utils
 
 _ = i18n.Translator("modules/fun").translate
 config = database.config.Config.get()
 actions = ("hug", "pet", "hyperpet", "slap", "spank", "whip", "bonk")
+data_dir = Path(__name__) / "modules" / "fun" / "meme" / "data"
 
 class Meme(commands.Cog):
     def __init__(self, bot):
@@ -398,12 +401,12 @@ class Meme(commands.Cog):
         width, height = 148, 148
         vertical_offset = (0, 0, 0, 0, 1, 2, 3, 4, 5, 4, 3, 2, 2, 1, 0)
 
-        frame_avatar = utils.Graphics.round_image(avatar.resize((100, 100)))
+        frame_avatar = ImageUtils.round_image(avatar.resize((100, 100)))
 
         for i in range(14):
             img = "%02d" % (i + 1)
             frame = Image.new("RGBA", (width, height), (54, 57, 63, 1))
-            hand = Image.open(f"modules/meme/data/pet/{img}.png")
+            hand = Image.open(f"{data_dir}/pet/{img}.png")
             frame.paste(frame_avatar, (35, 25 + vertical_offset[i]), frame_avatar)
             frame.paste(hand, (10, 5), hand)
             frames.append(frame)
@@ -417,17 +420,17 @@ class Meme(commands.Cog):
         width, height = 148, 148
         vertical_offset = (0, 1, 2, 3, 1, 0)
 
-        avatar = utils.Graphics.round_image(avatar.resize((100, 100)))
+        avatar = ImageUtils.round_image(avatar.resize((100, 100)))
         avatar_pixels = np.array(avatar)
         git_hash = int(utils.git_get_hash(), 16)
 
         for i in range(6):
             deform_hue = git_hash % 100 ** (i + 1) // 100 ** i / 100
-            frame_avatar = Image.fromarray(utils.Graphics.shift_hue(avatar_pixels, deform_hue))
+            frame_avatar = Image.fromarray(ImageUtils.shift_hue(avatar_pixels, deform_hue))
 
             img = "%02d" % (i + 1)
             frame = Image.new("RGBA", (width, height), (54, 57, 63, 1))
-            hand = Image.open(f"modules/meme/data/hyperpet/{img}.png")
+            hand = Image.open(f"{data_dir}/hyperpet/{img}.png")
             frame.paste(frame_avatar, (35, 25 + vertical_offset[i]), frame_avatar)
             frame.paste(hand, (10, 5), hand)
             frames.append(frame)
@@ -441,12 +444,12 @@ class Meme(commands.Cog):
         width, height = 200, 170
         deformation = (0, 0, 0, 5, 10, 20, 15, 5)
 
-        avatar = utils.Graphics.round_image(avatar.resize((100, 100)))
+        avatar = ImageUtils.round_image(avatar.resize((100, 100)))
 
         for i in range(8):
             img = "%02d" % (i + 1)
             frame = Image.new("RGBA", (width, height), (54, 57, 63, 1))
-            bat = Image.open(f"modules/meme/data/bonk/{img}.png")
+            bat = Image.open(f"{data_dir}/bonk/{img}.png")
 
             frame_avatar = avatar.resize((100, 100 - deformation[i]))
 
@@ -464,12 +467,12 @@ class Meme(commands.Cog):
         deformation = (0, 0, 0, 0, 0, 0, 0, 0, 2, 3, 5, 9, 6, 4, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
         translation = (0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 2, 3, 3, 3, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 
-        avatar = utils.Graphics.round_image(avatar.resize((100, 100)))
+        avatar = ImageUtils.round_image(avatar.resize((100, 100)))
 
         for i in range(26):
             img = "%02d" % (i + 1)
             frame = Image.new("RGBA", (width, height), (54, 57, 63, 1))
-            whip_frame = Image.open(f"modules/meme/data/whip/{img}.png").resize((150, 150))
+            whip_frame = Image.open(f"{data_dir}/whip/{img}.png").resize((150, 150))
 
             frame_avatar = avatar.resize((100 - deformation[i], 100))
 
@@ -486,12 +489,12 @@ class Meme(commands.Cog):
         width, height = 200, 120
         deformation = (4, 2, 1, 0, 0, 0, 0, 3)
 
-        avatar = utils.Graphics.round_image(avatar.resize((100, 100)))
+        avatar = ImageUtils.round_image(avatar.resize((100, 100)))
 
         for i in range(8):
             img = "%02d" % (i + 1)
             frame = Image.new("RGBA", (width, height), (54, 57, 63, 1))
-            spoon = Image.open(f"modules/meme/data/spank/{img}.png").resize((100, 100))
+            spoon = Image.open(f"{data_dir}/spank/{img}.png").resize((100, 100))
 
             frame_avatar = avatar.resize((100 + 2 * deformation[i], 100 + 2 * deformation[i]))
 
