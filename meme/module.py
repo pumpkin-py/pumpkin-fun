@@ -424,7 +424,7 @@ class Meme(commands.Cog):
 
         avatar = ImageUtils.round_image(avatar.resize((100, 100)))
         avatar_pixels = np.array(avatar)
-        git_hash = int(git_get_hash(), 16)
+        git_hash = int(self.git_get_hash(), 16)
 
         for i in range(6):
             deform_hue = git_hash % 100 ** (i + 1) // 100 ** i / 100
