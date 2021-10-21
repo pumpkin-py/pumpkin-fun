@@ -329,7 +329,7 @@ class Meme(commands.Cog):
         if message is None:
             text = "OwO!"
         else:
-            text = utils.Text.sanitise(self.uwuize(message), limit=1900, markdown=True)
+            text = utils.Text.sanitise(self.uwuize(message), limit=1900, escape=False)
         await ctx.send(f"**{utils.Text.sanitise(ctx.author.display_name)}**\n>>> " + text)
         
         await utils.Discord.delete_message(ctx.message)
@@ -348,7 +348,7 @@ class Meme(commands.Cog):
                     text += letter
                 text = utils.Text.sanitise(text, limit=1960)
         await ctx.send(f"**{utils.Text.sanitise(ctx.author.display_name)}**\n>>> " + text)
-        await utils.delete(ctx.message)
+        await utils.Discord.delete_message(ctx.message)
 
     ##
     ## Logic
