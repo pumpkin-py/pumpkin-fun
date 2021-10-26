@@ -257,7 +257,7 @@ class Meme(commands.Cog):
     @commands.guild_only()
     @commands.cooldown(rate=5, per=20.0, type=commands.BucketType.user)
     @commands.command()
-    async def slap(self, ctx, *, user: discord.Member = None):
+    async def slap(self, ctx, *, user: Union[discord.Member, discord.Role] = None):
         """Slap someone"""
         if user is None:
             source = self.bot.user
@@ -267,14 +267,17 @@ class Meme(commands.Cog):
             target = user
 
         options = ["つ", "づ", "ノ"]
-
-        Relation.add(ctx.guild.id, source.id, target.id, "slap")
+        
+        if type(target) == discord.Role:
+            Relation.add(ctx.guild.id, source.id, None, "hug")
+        else:
+            Relation.add(ctx.guild.id, source.id, target.id, "slap")
 
         await ctx.reply(
             "**{}**{} {}".format(
                 utils.Text.sanitise(source.display_name),
                 random.choice(options),
-                utils.Text.sanitise(target.display_name),
+                utils.Text.sanitise(target.name),
             ),
             mention_author=False,
         )
