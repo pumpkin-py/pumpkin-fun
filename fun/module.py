@@ -269,7 +269,7 @@ class Meme(commands.Cog):
         options = ["つ", "づ", "ノ"]
 
         if type(target) == discord.Role:
-            Relation.add(ctx.guild.id, source.id, None, "hug")
+            Relation.add(ctx.guild.id, source.id, None, "slap")
         else:
             Relation.add(ctx.guild.id, source.id, target.id, "slap")
 
