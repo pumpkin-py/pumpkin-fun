@@ -320,26 +320,31 @@ class Dhash(commands.Cog):
 
         duplicates = {}
         all_images = None
+        
 
         for image_hash in image_hashes:
             # try to look up hash directly
             images = ImageHash.get_hash(
                 message.guild.id, message.channel.id, str(hex(image_hash))
             )
-            
+            print("Found {} images!".format(len(images)))
             duplicated = False
             
             for image in images:
+                print("Checking image {}".format(image.hash))
                 # skip current message
-                if image.message_id == message.id:
+                if image.message_id == message.id: 
+                    print("It's from the same message {}".format(image.message_id))
                     continue
                 # add to duplicates
+                print("Duplicated!")
                 duplicates[image] = 0
                 duplicated = True
                 break
 
             # move on to the next hash
             if duplicated:
+                print("Duplicated, skipping next")
                 continue
 
             # full match not found, iterate over whole database
