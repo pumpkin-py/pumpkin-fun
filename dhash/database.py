@@ -19,11 +19,6 @@ class ImageHash(database.base):
     attachment_id = Column(BigInteger)
     hash = Column(String)
 
-    __table_args__ = (
-        UniqueConstraint(guild_id, channel_id),
-        UniqueConstraint(message_id, attachment_id),
-    )
-
     def add(
         guild_id: int, channel_id: int, message_id: int, attachment_id: int, hash: str
     ):
