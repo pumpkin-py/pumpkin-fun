@@ -3,8 +3,6 @@ import dhash
 import time
 from io import BytesIO
 from PIL import Image
-from typing import Optional, List, Dict
-
 import discord
 from discord.ext import commands
 
@@ -398,7 +396,7 @@ class Dhash(commands.Cog):
             author = discord.utils.escape_markdown(original_message.author.display_name)
             link = f"[**{author}**, {timestamp}]({original_message.jump_url})"
         except discord.errors.NotFound:
-            link = "404 " + emote.sad
+            link = "404 😿"
 
         description = _(ctx, "{name}, matching **{similarity}**!").format(
             name=discord.utils.escape_markdown(message.author.display_name),
