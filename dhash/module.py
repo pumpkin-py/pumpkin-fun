@@ -116,7 +116,7 @@ class Dhash(commands.Cog):
         status = await ctx.send(
             _(ctx, "**LOADING**")
             + "\n"
-            + _(ctx, "Downloaded **count** messages.").format(count=len(messages))
+            + _(ctx, "Downloaded **{count}** messages.").format(count=len(messages))
         )
 
         await asyncio.sleep(1)
