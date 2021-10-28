@@ -382,10 +382,10 @@ class Dhash(commands.Cog):
             await message.add_reaction("♻️")
         elif distance <= LIMIT_HARD:
             level = _(ctx, "**♻️ This is probably repost!**")
-            await message.add_reaction("🤔")
+            await message.add_reaction("♻")
         else:
             level = _(ctx, "🤷🏻 This could be repost.")
-            await message.add_reaction("🤷🏻")
+            await message.add_reaction("♻")
 
         similarity = "{:.1f} %".format((1 - distance / 128) * 100)
         timestamp = utils.Time.id_to_datetime(original.attachment_id).strftime(
@@ -417,7 +417,7 @@ class Dhash(commands.Cog):
             name=_(ctx, "Hint"),
             value=_(
                 ctx,
-                " _If image is repost, give it ♻️ reaction. If it's not, click here on ❎ and when we reach {limit} reactions this message will be deleted._",
+                " _If image is repost, give it ♻️ reaction. If it's not, click here on ❎ and when we reach {limit} reactions, this message will be deleted._",
             ).format(
                 limit=NOT_DUPE_LIMIT,
             ),
