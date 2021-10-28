@@ -2,7 +2,7 @@ import asyncio
 import dhash
 import time
 from io import BytesIO
-from PIL import ImageHash
+from PIL import Image
 from typing import Optional, List, Dict
 
 import discord
