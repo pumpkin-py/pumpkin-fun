@@ -74,7 +74,7 @@ class ImageHash(database.base):
         )
 
     def delete_by_message(guild_id: int, message_id: int):
-        print("Deleting message {} in guild {}".format(message_id, guild_id)
+        print("Deleting message {} in guild {}".format(message_id, guild_id))
         image = (
             session.query(ImageHash)
             .filter_by(guild_id=guild_id, message_id=message_id)
