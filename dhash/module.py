@@ -423,7 +423,7 @@ class Dhash(commands.Cog):
         await report.add_reaction("❎")
 
     def _in_repost_channel(self, message: discord.Message) -> bool:
-        channel = HashChannel.get(message.channel.id)
+        channel = HashChannel.get(message.guild.id, message.channel.id)
         if not channel:
             return False
         if message.attachments is None or not len(message.attachments):
