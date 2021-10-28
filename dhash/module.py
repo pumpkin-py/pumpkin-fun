@@ -82,4 +82,4 @@ class Dhash(commands.Cog):
 
 
 def setup(bot) -> None:
-    bot.add_cog(Rand(bot))
+    bot.add_cog(Dhash(bot))
