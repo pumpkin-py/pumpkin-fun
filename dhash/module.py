@@ -355,7 +355,7 @@ class Dhash(commands.Cog):
                     continue
 
                 # do the comparison
-                db_image_hash = int(image.dhash, 16)
+                db_image_hash = int(image.hash, 16)
                 distance = dhash.get_num_bits_different(db_image_hash, image_hash)
                 if distance < minimal_distance:
                     duplicate = image
