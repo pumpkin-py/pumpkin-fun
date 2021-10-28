@@ -87,7 +87,7 @@ class Image(database.base):
         }
 
 
-class ImageChannel(database.base):
+class HashChannel(database.base):
     __tablename__ = "fun_dhash_channels"
 
     idx = Column(Integer, primary_key=True, autoincrement=True)
@@ -96,27 +96,27 @@ class ImageChannel(database.base):
 
     __table_args__ = (UniqueConstraint(guild_id, channel_id),)
 
-    def add(guild_id: int, channel_id: int) -> ImageChannel:
-        channel = ImageChannel(guild_id=guild_id, channel_id=channel_id)
+    def add(guild_id: int, channel_id: int) -> HashChannel:
+        channel = HashChannel(guild_id=guild_id, channel_id=channel_id)
         session.add(channel)
         session.commit()
         return channel
 
-    def get(guild_id: int, channel_id: int) -> Optional[ImageChannel]:
+    def get(guild_id: int, channel_id: int) -> Optional[HashChannel]:
         query = (
-            session.query(ImageChannel)
+            session.query(HashChannel)
             .filter_by(guild_id=guild_id, channel_id=channel_id)
             .one_or_none()
         )
         return query
 
-    def get_all(guild_id: int) -> List[ImageChannel]:
-        query = session.query(ImageChannel).filter_by(guild_id=guild_id).all()
+    def get_all(guild_id: int) -> List[HashChannel]:
+        query = session.query(HashChannel).filter_by(guild_id=guild_id).all()
         return query
 
     def remove(guild_id: int, channel_id):
         query = (
-            session.query(ImageChannel)
+            session.query(HashChannel)
             .filter_by(guild_id=guild_id, channel_id=channel_id)
             .delete()
         )
