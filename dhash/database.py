@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Tuple
 
-from sqlalchemy import BigInteger, Column, Integer, String
+from sqlalchemy import BigInteger, Column, Integer, String, UniqueConstraint
 
 from database import database, session
 
