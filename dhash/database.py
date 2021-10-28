@@ -47,7 +47,8 @@ class ImageHash(database.base):
     def get_hash(guild_id: int, channel_id: int, hash: str):
         return (
             session.query(ImageHash)
-            .filter_by(guild_id=guild_id, channel_id=channel_id, hash=hash)
+            .filter_by(guild_id=guild_id, channel_id=channel_id)
+            .filter(ImageHash.hash=hash)
             .all()
         )
 
