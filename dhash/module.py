@@ -368,7 +368,7 @@ class Dhash(commands.Cog):
             await self._report_duplicate(message, image_hash, distance)
 
     async def _report_duplicate(
-        self, ctx, message: discord.Message, original: ImageHash, distance: int
+        self, message: discord.Message, original: ImageHash, distance: int
     ):
         """Send report.
         message: The new message containing attachment repost.
