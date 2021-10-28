@@ -93,13 +93,13 @@ class Dhash(commands.Cog):
             f"Channel #{channel.name} is no longer a hash channel.",
         )
 
-    @commands.check(acl.check)
+    @commands.check(check.acl)
     @commands.group()
     async def repost(self, ctx):
         """Scan for reposts"""
         await utils.Discord.send_help(ctx)
 
-    @commands.check(acl.check)
+    @commands.check(check.acl)
     @commands.max_concurrency(1, per=commands.BucketType.default, wait=False)
     @commands.bot_has_permissions(read_message_history=True)
     @dhash.command(name="history")
@@ -168,7 +168,7 @@ class Dhash(commands.Cog):
             )
         )
 
-    @commands.check(acl.check)
+    @commands.check(check.acl)
     @dhash.command(name="compare", aliases=["messages"])
     async def scan_compare(self, ctx, messages: commands.Greedy[discord.Message]):
         """Display hashes of given messages.
