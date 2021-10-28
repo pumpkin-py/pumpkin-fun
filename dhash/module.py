@@ -102,7 +102,7 @@ class Dhash(commands.Cog):
     @commands.check(acl.check)
     @commands.max_concurrency(1, per=commands.BucketType.default, wait=False)
     @commands.bot_has_permissions(read_message_history=True)
-    @repost.command(name="history")
+    @dhash.command(name="history")
     async def repost_history(self, ctx, limit: int):
         """Scan current channel for images and save them as hashes.
         limit: How many messages should be scanned. Negative to scan all.
@@ -169,7 +169,7 @@ class Dhash(commands.Cog):
         )
 
     @commands.check(acl.check)
-    @repost.command(name="compare", aliases=["messages"])
+    @dhash.command(name="compare", aliases=["messages"])
     async def scan_compare(self, ctx, messages: commands.Greedy[discord.Message]):
         """Display hashes of given messages.
         messages: Space separated list of messages.
