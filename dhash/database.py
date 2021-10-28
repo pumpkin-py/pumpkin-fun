@@ -48,7 +48,7 @@ class ImageHash(database.base):
         return (
             session.query(ImageHash)
             .filter_by(guild_id=guild_id, channel_id=channel_id)
-            .filter(ImageHash.hash==hash)
+            .filter(ImageHash.hash.like("%{}%".format(hash)))
             .all()
         )
 
