@@ -202,11 +202,8 @@ class Dhash(commands.Cog):
 
     @commands.Cog.listener()
     async def on_raw_message_delete(self, payload: discord.RawMessageDeleteEvent):
-        print("Delete")
         channel = HashChannel.get(payload.guild_id, payload.channel_id)
-        
         if channel:
-            print ("Truly delete")
             ImageHash.delete_by_message(payload.guild_id, payload.message_id)
 
     @commands.Cog.listener()
@@ -325,32 +322,25 @@ class Dhash(commands.Cog):
 
         duplicates = {}
         all_images = None
-        
 
         for image_hash in image_hashes:
             # try to look up hash directly
-            print("Searching for guild {} channel {} hash {}".format(message.guild.id, message.channel.id, str(hex(image_hash))))
             images = ImageHash.get_hash(
                 message.guild.id, message.channel.id, str(hex(image_hash))
             )
-            print("Found {} images!".format(len(images)))
             duplicated = False
-            
+
             for image in images:
-                print("Checking image {}".format(image.hash))
                 # skip current message
-                if image.message_id == message.id: 
-                    print("It's from the same message {}".format(image.message_id))
+                if image.message_id == message.id:
                     continue
                 # add to duplicates
-                print("Duplicated!")
                 duplicates[image] = 0
                 duplicated = True
                 break
 
             # move on to the next hash
             if duplicated:
-                print("Duplicated, skipping next")
                 continue
 
             # full match not found, iterate over whole database

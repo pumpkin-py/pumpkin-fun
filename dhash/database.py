@@ -28,11 +28,14 @@ class ImageHash(database.base):
         guild_id: int, channel_id: int, message_id: int, attachment_id: int, hash: str
     ):
         """Add new image hash"""
-        image = ImageHash.get_by_attachment(guild_id=guild_id, attachment_id=attachment_id)
+        image = ImageHash.get_by_attachment(
+            guild_id=guild_id, attachment_id=attachment_id
+        )
         if image is not None:
             return image
 
         image = ImageHash(
+            guild_id=guild_id,
             channel_id=channel_id,
             message_id=message_id,
             attachment_id=attachment_id,
@@ -74,7 +77,6 @@ class ImageHash(database.base):
         )
 
     def delete_by_message(guild_id: int, message_id: int):
-        print("Deleting message {} in guild {}".format(message_id, guild_id))
         image = (
             session.query(ImageHash)
             .filter_by(guild_id=guild_id, message_id=message_id)
