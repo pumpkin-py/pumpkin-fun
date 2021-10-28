@@ -88,7 +88,7 @@ msgstr Originál
 msgid Hint
 msgstr Nápověda
 
-msgid  _If image is repost, give it ♻️ reaction. If it's not, click here on ❎ and when we reach {limit} reactions this message will be deleted._
+msgid  _If image is repost, give it ♻️ reaction. If it's not, click here on ❎ and when we reach {limit} reactions, this message will be deleted._
 msgstr _Pokud je obrázek repost, dej mu ♻️. Jestli není, klikni tady na ❎ a při {limit} takových reakcích se toto upozornění smaže._
 
 msgid Relations
