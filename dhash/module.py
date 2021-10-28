@@ -17,7 +17,7 @@ LIMIT_FULL = 3
 LIMIT_HARD = 7
 LIMIT_SOFT = 14
 
-NOT_DUPE_LIMIT = 5
+NOT_DUPLICATE_LIMIT = 5
 
 MAX_ATTACHMENT_SIZE = 8000
 
@@ -25,6 +25,16 @@ MAX_ATTACHMENT_SIZE = 8000
 class Dhash(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+
+    def _in_repost_channel(self, message: discord.Message) -> bool:
+        channel = HashChannel.get(message.guild.id, message.channel.id)
+        if not channel:
+            return False
+        if message.attachments is None or not len(message.attachments):
+            return False
+        if message.author.bot:
+            return False
+        return True
 
     @commands.guild_only()
     @commands.check(check.acl)
@@ -61,7 +71,7 @@ class Dhash(commands.Cog):
     @commands.check(check.acl)
     @dhash.command(name="list")
     async def dhash_list(self, ctx):
-        hash_channels = HashChannel.get_all(ctx.guild.id)
+        hash_channels = HashChannel.get_by_channel(ctx.guild.id)
         if not hash_channels:
             await ctx.reply(_(ctx, "This server has no hash channels."))
             return
@@ -82,14 +92,14 @@ class Dhash(commands.Cog):
     async def dhash_remove(self, ctx, channel: discord.TextChannel):
         if HashChannel.remove(ctx.guild.id, channel.id):
             message = _(ctx, "Hash channel {channel} removed.")
+            await guild_log.info(
+                ctx.author,
+                ctx.channel,
+                f"Channel #{channel.name} is no longer a hash channel.",
+            )
         else:
             message = _(ctx, "{channel} is not hash channel.")
         await ctx.reply(message.format(channel=channel.mention))
-        await guild_log.info(
-            ctx.author,
-            ctx.channel,
-            f"Channel #{channel.name} is no longer a hash channel.",
-        )
 
     @commands.check(check.acl)
     @commands.group()
@@ -123,17 +133,17 @@ class Dhash(commands.Cog):
         ctr_hashes: int = 0
         now = time.time()
         for i, message in enumerate(messages, 1):
-            if i % 20 == 0:
+            if i % 50 == 0:
                 await status.edit(
                     content=(
                         _(ctx, "**SCANNING**")
                         + "\n"
                         + _(
                             ctx,
-                            "Processed **{count}** out of **{total}** messages {percent} %).",
+                            "Processed **{count}** out of **{total}** messages ({percent} %).",
                         )
                         + "\n"
-                        + _(ctx, "Calculated **((hashes))** hashes.")
+                        + _(ctx, "Calculated **{hashes}** hashes.")
                     ).format(
                         count=i,
                         total=len(messages),
@@ -168,7 +178,7 @@ class Dhash(commands.Cog):
 
     @commands.check(check.acl)
     @dhash.command(name="compare", aliases=["messages"])
-    async def scan_compare(self, ctx, messages: commands.Greedy[discord.Message]):
+    async def dhash_compare(self, ctx, messages: commands.Greedy[discord.Message]):
         """Display hashes of given messages.
         messages: Space separated list of messages.
         """
@@ -183,13 +193,11 @@ class Dhash(commands.Cog):
                 _(ctx, "Message **`{message_id}`**").format(message_id=message.id)
             )
             for db_image in db_images:
-                text.append(
-                    "   " + _(ctx, "> `{hash}`").format(hash=db_image.dhash[2:])
-                )
+                text.append("   > `{hash}`".format(hash=db_image.dhash[2:]))
             text.append("")
 
         if not len(text):
-            return await ctx.send(_(ctx, "Message has no associtated hashes"))
+            return await ctx.send(_(ctx, "Messages has no associtated hashes."))
 
         await ctx.send("\n".join(text))
 
@@ -269,7 +277,7 @@ class Dhash(commands.Cog):
             if (
                 emoji == "❎"
                 and str(report_reaction) == "❎"
-                and report_reaction.count > NOT_DUPE_LIMIT
+                and report_reaction.count > NOT_DUPLICATE_LIMIT
             ):
                 # remove bot's reaction, it is not a repost
                 try:
@@ -343,7 +351,9 @@ class Dhash(commands.Cog):
 
             # full match not found, iterate over whole database
             if all_images is None:
-                all_images = ImageHash.get_all(message.guild.id, message.channel.id)
+                all_images = ImageHash.get_by_channel(
+                    message.guild.id, message.channel.id
+                )
 
             minimal_distance = 128
             duplicate = None
@@ -373,16 +383,16 @@ class Dhash(commands.Cog):
         original: The original attachment.
         distance: Hamming distance between the original and repost.
         """
-        ctx = TranslationContext(message.guild.id, message.author.id)
+        tx = TranslationContext(message.guild.id, message.author.id)
 
         if distance <= LIMIT_FULL:
-            level = _(ctx, "**♻️ This is repost!**")
+            level = _(tx, "**♻️ This is repost!**")
             await message.add_reaction("♻️")
         elif distance <= LIMIT_HARD:
-            level = _(ctx, "**♻️ This is probably repost!**")
+            level = _(tx, "**♻️ This is probably repost!**")
             await message.add_reaction("♻")
         else:
-            level = _(ctx, "🤷🏻 This could be repost.")
+            level = _(tx, "🤷🏻 This could be repost.")
             await message.add_reaction("♻")
 
         similarity = "{:.1f} %".format((1 - distance / 128) * 100)
@@ -398,7 +408,7 @@ class Dhash(commands.Cog):
         except discord.errors.NotFound:
             link = "404 😿"
 
-        description = _(ctx, "{name}, matching **{similarity}**!").format(
+        description = _(tx, "{name}, matching **{similarity}**!").format(
             name=discord.utils.escape_markdown(message.author.display_name),
             similarity=similarity,
         )
@@ -406,34 +416,24 @@ class Dhash(commands.Cog):
         embed = utils.Discord.create_embed(title=level, description=description)
 
         embed.add_field(
-            name=_(ctx, "Original"),
+            name=_(tx, "Original"),
             value=link,
             inline=False,
         )
 
         embed.add_field(
-            name=_(ctx, "Hint"),
+            name=_(tx, "Hint"),
             value=_(
-                ctx,
+                tx,
                 " _If image is repost, give it ♻️ reaction. If it's not, click here on ❎ and when we reach {limit} reactions, this message will be deleted._",
             ).format(
-                limit=NOT_DUPE_LIMIT,
+                limit=NOT_DUPLICATE_LIMIT,
             ),
             inline=False,
         )
         embed.set_footer(text=f"{message.author.id} | {message.id}")
         report = await message.reply(embed=embed)
         await report.add_reaction("❎")
-
-    def _in_repost_channel(self, message: discord.Message) -> bool:
-        channel = HashChannel.get(message.guild.id, message.channel.id)
-        if not channel:
-            return False
-        if message.attachments is None or not len(message.attachments):
-            return False
-        if message.author.bot:
-            return False
-        return True
 
 
 def setup(bot) -> None:

@@ -19,9 +19,10 @@ class ImageHash(database.base):
     attachment_id = Column(BigInteger)
     hash = Column(String)
 
+    @staticmethod
     def add(
         guild_id: int, channel_id: int, message_id: int, attachment_id: int, hash: str
-    ):
+    ) -> ImageHash:
         """Add new image hash"""
         image = ImageHash.get_by_attachment(
             guild_id=guild_id, attachment_id=attachment_id
@@ -42,21 +43,23 @@ class ImageHash(database.base):
 
         return image
 
+    @staticmethod
     def get_hash(guild_id: int, channel_id: int, hash: str):
         return (
             session.query(ImageHash)
-            .filter_by(guild_id=guild_id, channel_id=channel_id)
-            .filter(ImageHash.hash.like("%{}%".format(hash)))
+            .filter_by(guild_id=guild_id, channel_id=channel_id, hash=hash)
             .all()
         )
 
-    def get_all(guild_id: int, channel_id: int):
+    @staticmethod
+    def get_by_channel(guild_id: int, channel_id: int):
         return (
             session.query(ImageHash)
             .filter_by(guild_id=guild_id, channel_id=channel_id)
             .all()
         )
 
+    @staticmethod
     def get_by_message(guild_id: int, message_id: int):
         return (
             session.query(ImageHash)
@@ -64,6 +67,7 @@ class ImageHash(database.base):
             .all()
         )
 
+    @staticmethod
     def get_by_attachment(guild_id: int, attachment_id: int):
         return (
             session.query(ImageHash)
@@ -71,6 +75,7 @@ class ImageHash(database.base):
             .one_or_none()
         )
 
+    @staticmethod
     def delete_by_message(guild_id: int, message_id: int):
         image = (
             session.query(ImageHash)
@@ -107,6 +112,11 @@ class HashChannel(database.base):
     __table_args__ = (UniqueConstraint(guild_id, channel_id),)
 
     def add(guild_id: int, channel_id: int) -> HashChannel:
+        existing = HashChannel.get(guild_id, channel_id)
+
+        if existing:
+            return existing
+
         channel = HashChannel(guild_id=guild_id, channel_id=channel_id)
         session.add(channel)
         session.commit()
