@@ -335,7 +335,7 @@ class Dhash(commands.Cog):
                 break
 
             # move on to the next hash
-            if duplicates[image]:
+            if image in duplicates:
                 continue
 
             # full match not found, iterate over whole database
