@@ -6,7 +6,7 @@ from typing import Optional, List, Dict
 import discord
 from discord.ext import commands
 
-from core import utils, i18n, logger, utils
+from core import utils, i18n, logger, check
 
 _ = i18n.Translator("modules/fun").translate
 
