@@ -416,7 +416,7 @@ class Dhash(commands.Cog):
         embed.add_field(
             name=_(ctx, "Hint"),
             value=_(
-                _ctx,
+                _(ctx,
                 " _If image is repost, give it ♻️ reaction. If it's not, click here on ❎ and when we reach {limit} reactions this message will be deleted._",
             ).format(
                 limit=NOT_DUPE_LIMIT,
