@@ -375,7 +375,7 @@ class Dhash(commands.Cog):
         original: The original attachment.
         distance: Hamming distance between the original and repost.
         """
-        ctx = TranslationContext(message.guild.id, message.user.id)
+        ctx = TranslationContext(message.guild.id, message.author.id)
 
         if distance <= LIMIT_FULL:
             level = _(ctx, "**♻️ This is repost!**")
