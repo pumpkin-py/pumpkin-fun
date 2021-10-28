@@ -326,16 +326,20 @@ class Dhash(commands.Cog):
             images = ImageHash.get_hash(
                 message.guild.id, message.channel.id, str(hex(image_hash))
             )
+            
+            duplicated = False
+            
             for image in images:
                 # skip current message
                 if image.message_id == message.id:
                     continue
                 # add to duplicates
                 duplicates[image] = 0
+                duplicated = True
                 break
 
             # move on to the next hash
-            if image in duplicates:
+            if duplicated:
                 continue
 
             # full match not found, iterate over whole database

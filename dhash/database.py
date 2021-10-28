@@ -75,7 +75,7 @@ class ImageHash(database.base):
     def delete_by_message(guild_id: int, message_id: int):
         image = (
             session.query(ImageHash)
-            .filter(guild_id=guild_id, message_id=message_id)
+            .filter_by(guild_id=guild_id, message_id=message_id)
             .delete()
         )
         session.commit()
