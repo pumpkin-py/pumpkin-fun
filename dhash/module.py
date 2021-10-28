@@ -7,6 +7,7 @@ import discord
 from discord.ext import commands
 
 from core import utils, i18n, logger, check
+from .database import HashChannel
 
 _ = i18n.Translator("modules/fun").translate
 
