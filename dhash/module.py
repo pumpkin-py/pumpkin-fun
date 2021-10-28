@@ -202,7 +202,7 @@ class Dhash(commands.Cog):
 
     @commands.Cog.listener()
     async def on_raw_message_delete(self, payload: discord.RawMessageDeleteEvent):
-        print("Deleteing guild {} message {}".format(payload.guild_id, payload.message_id)
+        print("Deleteing guild {} message {}".format(payload.guild_id, payload.message_id))
         ImageHash.delete_by_message(payload.guild_id, payload.message_id)
 
     @commands.Cog.listener()
