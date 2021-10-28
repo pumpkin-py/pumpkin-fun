@@ -12,6 +12,7 @@ from .database import HashChannel
 _ = i18n.Translator("modules/fun").translate
 guild_log = logger.Guild.logger()
 
+
 class Dhash(commands.Cog):
     def __init__(self, bot):
         self.bot = bot

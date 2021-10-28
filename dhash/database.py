@@ -7,10 +7,10 @@ from sqlalchemy import BigInteger, Column, Integer, String, UniqueConstraint
 from database import database, session
 
 
-class Hash(database.base):
+class Image(database.base):
     """Stored image hashes"""
 
-    __tablename__ = "fun_dhash_hashes"
+    __tablename__ = "fun_dhash_images"
 
     idx = Column(Integer, primary_key=True, autoincrement=True)
     guild_id = Column(BigInteger)
@@ -23,6 +23,52 @@ class Hash(database.base):
         UniqueConstraint(guild_id, channel_id),
         UniqueConstraint(message_id, attachment_id),
     )
+
+    def add(
+        guild_id: int, channel_id: int, message_id: int, attachment_id: int, hash: str
+    ):
+        """Add new image hash"""
+        image = Image.get_by_attachment(attachment_id)
+        if image is not None:
+            return image
+
+        image = Image(
+            channel_id=channel_id,
+            message_id=message_id,
+            attachment_id=attachment_id,
+            hash=hash,
+        )
+
+        session.add(image)
+        session.commit()
+
+        return image
+
+    def get_hash(guild_id: int, hash: str):
+        return session.query(Image).filter_by(guild_id=guild_id, hash=hash).all()
+
+    def get_by_message(guild_id: int, message_id: int):
+        return (
+            session.query(Image)
+            .filter_by(guild_id=guild_id, message_id=message_id)
+            .all()
+        )
+
+    def get_by_attachment(guild_id: int, attachment_id: int):
+        return (
+            session.query(Image)
+            .filter_by(guild_id=guild_id, attachment_id=attachment_id)
+            .one_or_none()
+        )
+
+    def delete_by_message(guild_id: int, message_id: int):
+        image = (
+            session.query(Image)
+            .filter(guild_id=guild_id, message_id=message_id)
+            .delete()
+        )
+        session.commit()
+        return image
 
     def __repr__(self) -> str:
         return (
@@ -41,7 +87,7 @@ class Hash(database.base):
         }
 
 
-class HashChannel(database.base):
+class ImageChannel(database.base):
     __tablename__ = "fun_dhash_channels"
 
     idx = Column(Integer, primary_key=True, autoincrement=True)
@@ -50,27 +96,27 @@ class HashChannel(database.base):
 
     __table_args__ = (UniqueConstraint(guild_id, channel_id),)
 
-    def add(guild_id: int, channel_id: int) -> HashChannel:
-        channel = HashChannel(guild_id=guild_id, channel_id=channel_id)
+    def add(guild_id: int, channel_id: int) -> ImageChannel:
+        channel = ImageChannel(guild_id=guild_id, channel_id=channel_id)
         session.add(channel)
         session.commit()
         return channel
 
-    def get(guild_id: int, channel_id: int) -> Optional[HashChannel]:
+    def get(guild_id: int, channel_id: int) -> Optional[ImageChannel]:
         query = (
-            session.query(HashChannel)
+            session.query(ImageChannel)
             .filter_by(guild_id=guild_id, channel_id=channel_id)
             .one_or_none()
         )
         return query
 
-    def get_all(guild_id: int) -> List[HashChannel]:
-        query = session.query(HashChannel).filter_by(guild_id=guild_id).all()
+    def get_all(guild_id: int) -> List[ImageChannel]:
+        query = session.query(ImageChannel).filter_by(guild_id=guild_id).all()
         return query
 
     def remove(guild_id: int, channel_id):
         query = (
-            session.query(HashChannel)
+            session.query(ImageChannel)
             .filter_by(guild_id=guild_id, channel_id=channel_id)
             .delete()
         )
