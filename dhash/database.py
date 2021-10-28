@@ -6,6 +6,7 @@ from sqlalchemy import BigInteger, Column, Integer, String
 
 from database import database, session
 
+
 class Hash(database.base):
     """Stored image hashes"""
 
@@ -17,13 +18,11 @@ class Hash(database.base):
     message_id = Column(BigInteger)
     attachment_id = Column(BigInteger)
     hash = Column(String)
-    
+
     __table_args__ = (
         UniqueConstraint(guild_id, channel_id),
         UniqueConstraint(message_id, attachment_id),
     )
-
-    
 
     def __repr__(self) -> str:
         return (
@@ -41,6 +40,7 @@ class Hash(database.base):
             "hash": self.hash,
         }
 
+
 class HashChannel(database.base):
     __tablename__ = "fun_dhash_channels"
 
@@ -48,9 +48,7 @@ class HashChannel(database.base):
     guild_id = Column(BigInteger)
     channel_id = Column(BigInteger)
 
-    __table_args__ = (
-        UniqueConstraint(guild_id, channel_id),
-    )
+    __table_args__ = (UniqueConstraint(guild_id, channel_id),)
 
     def add(guild_id: int, channel_id: int) -> HashChannel:
         channel = HashChannel(guild_id=guild_id, channel_id=channel_id)
@@ -69,7 +67,6 @@ class HashChannel(database.base):
     def get_all(guild_id: int) -> List[HashChannel]:
         query = session.query(HashChannel).filter_by(guild_id=guild_id).all()
         return query
-
 
     def remove(guild_id: int, channel_id):
         query = (

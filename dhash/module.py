@@ -6,7 +6,7 @@ from typing import Optional, List, Dict
 import discord
 from discord.ext import commands
 
-from core import utils, i18n
+from core import utils, i18n, logger, utils
 
 _ = i18n.Translator("modules/fun").translate
 
@@ -79,6 +79,7 @@ class Dhash(commands.Cog):
             ctx.channel,
             f"Channel #{channel.name} is no longer a hash channel.",
         )
+
 
 def setup(bot) -> None:
     bot.add_cog(Rand(bot))
