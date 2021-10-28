@@ -324,6 +324,7 @@ class Dhash(commands.Cog):
 
         for image_hash in image_hashes:
             # try to look up hash directly
+            print("Searching for guild {} channel {} hash {}".format(message.guild.id, message.channel.id, str(hex(image_hash))))
             images = ImageHash.get_hash(
                 message.guild.id, message.channel.id, str(hex(image_hash))
             )
