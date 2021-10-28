@@ -7,7 +7,7 @@ from sqlalchemy import BigInteger, Column, Integer, String, UniqueConstraint
 from database import database, session
 
 
-class Image(database.base):
+class ImageHash(database.base):
     """Stored image hashes"""
 
     __tablename__ = "fun_dhash_images"
@@ -28,11 +28,11 @@ class Image(database.base):
         guild_id: int, channel_id: int, message_id: int, attachment_id: int, hash: str
     ):
         """Add new image hash"""
-        image = Image.get_by_attachment(attachment_id)
+        image = ImageHash.get_by_attachment(attachment_id)
         if image is not None:
             return image
 
-        image = Image(
+        image = ImageHash(
             channel_id=channel_id,
             message_id=message_id,
             attachment_id=attachment_id,
@@ -44,26 +44,37 @@ class Image(database.base):
 
         return image
 
-    def get_hash(guild_id: int, hash: str):
-        return session.query(Image).filter_by(guild_id=guild_id, hash=hash).all()
+    def get_hash(guild_id: int, channel_id: int, hash: str):
+        return (
+            session.query(ImageHash)
+            .filter_by(guild_id=guild_id, channel_id=channel_id, hash=hash)
+            .all()
+        )
+
+    def get_all(guild_id: int, channel_id: int):
+        return (
+            session.query(ImageHash)
+            .filter_by(guild_id=guild_id, channel_id=channel_id)
+            .all()
+        )
 
     def get_by_message(guild_id: int, message_id: int):
         return (
-            session.query(Image)
+            session.query(ImageHash)
             .filter_by(guild_id=guild_id, message_id=message_id)
             .all()
         )
 
     def get_by_attachment(guild_id: int, attachment_id: int):
         return (
-            session.query(Image)
+            session.query(ImageHash)
             .filter_by(guild_id=guild_id, attachment_id=attachment_id)
             .one_or_none()
         )
 
     def delete_by_message(guild_id: int, message_id: int):
         image = (
-            session.query(Image)
+            session.query(ImageHash)
             .filter(guild_id=guild_id, message_id=message_id)
             .delete()
         )
