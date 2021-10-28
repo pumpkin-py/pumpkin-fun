@@ -28,7 +28,7 @@ class ImageHash(database.base):
         guild_id: int, channel_id: int, message_id: int, attachment_id: int, hash: str
     ):
         """Add new image hash"""
-        image = ImageHash.get_by_attachment(attachment_id)
+        image = ImageHash.get_by_attachment(guild_id=guild_id, attachment_id=attachment_id)
         if image is not None:
             return image
 
