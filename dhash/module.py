@@ -306,10 +306,11 @@ class Dhash(commands.Cog):
         The footer contains reposter's user ID and repost message id.
         """
         print("Event!")
-        
-        hash_channel = HashChannel.get(reaction.message.guild.id, reaction.message.channel.id)
-                
-        
+
+        hash_channel = HashChannel.get(
+            reaction.message.guild.id, reaction.message.channel.id
+        )
+
         if not hash_channel:
             print("Not hash channel!")
             return
@@ -319,7 +320,7 @@ class Dhash(commands.Cog):
         if not reaction.message.author.bot:
             print("Message author not bot!")
             return
-            
+
         emoji = str(reaction.emoji)
 
         print("Emoji: {}", emoji)
@@ -337,7 +338,7 @@ class Dhash(commands.Cog):
             print(
                 "Count: {}, Limit: {}",
                 report_reaction.count,
-                hash_channel.limit),
+                hash_channel.limit,
             )
 
             if report_reaction.count > hash_channel.limit:
