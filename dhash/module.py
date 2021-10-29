@@ -312,20 +312,29 @@ class Dhash(commands.Cog):
         if not reaction.message.author.bot:
             return
         emoji = str(reaction.emoji)
+
+        print("Emoji: {}", emoji)
+
         if emoji != "❎":
             return
 
+        print("Checking")
+
         for report_reaction in reaction.message.reactions:
             if str(report_reaction) != "❎":
+                print("Rep. reaction: {}", report_reaction)
                 continue
 
-            if (
-                emoji == "❎"
-                and str(report_reaction) == "❎"
-                and report_reaction.count
-                > HashChannel.get_limit(
+            print(
+                "Count: {}, Limit: {}",
+                report_reaction.count,
+                HashChannel.get_limit(
                     reaction.message.guild.id, reaction.message.channel.id
-                )
+                ),
+            )
+
+            if report_reaction.count > HashChannel.get_limit(
+                reaction.message.guild.id, reaction.message.channel.id
             ):
                 # remove bot's reaction, it is not a repost
 
@@ -333,6 +342,9 @@ class Dhash(commands.Cog):
                     repost_message_id = int(
                         reaction.message.embeds[0].footer.text.split(" | ")[1]
                     )
+
+                    print("Message id: {}", repost_message_id)
+
                     repost_message = await reaction.message.channel.fetch_message(
                         repost_message_id
                     )
