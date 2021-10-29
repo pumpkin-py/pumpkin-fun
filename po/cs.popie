@@ -65,7 +65,7 @@ msgid **SCANNING**
 msgstr **SKENOVÁNÍ**
 
 mgsid Processed **{count}** out of **{total}** messages ({percent} %).
-msgstr Zpracování **{count} z **{total} zpráv ({percent} %).
+msgstr Zpracováno **{count} z **{total} zpráv ({percent} %).
 
 msgid Calculated **{hashes}** hashes.
 msgstr Vypočítáno **{hashes}** hashů
@@ -74,7 +74,7 @@ msgid **COMPLETED**
 msgstr **DOKONČENO**
 
 msgid Processed **{messages}** messages.
-msgstr Zpracování **{messages}** zpráv.
+msgstr Zpracováno **{messages}** zpráv.
 
 msgid Calculated **{hashes}** image hashes in **{seconds}** seconds.
 msgstr Vypočítáno **{hashes}** hashů obrázků za **{second}** sekund.
@@ -83,7 +83,7 @@ msgid Message **`{message_id}`**
 msgstr Zpráva **`{message_id}`**
 
 msgid Messages has no associtated hashes.
-msgstr Zprávy nemají žádné přiřazené hashe
+msgstr Ke zprávám nepatří žádné hashe
 
 msgid **♻️ This is repost!**
 msgstr **♻️ Toto je repost!**

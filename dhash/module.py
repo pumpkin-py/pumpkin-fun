@@ -17,8 +17,6 @@ LIMIT_FULL = 3
 LIMIT_HARD = 7
 LIMIT_SOFT = 14
 
-NOT_DUPLICATE_LIMIT = 5
-
 MAX_ATTACHMENT_SIZE = 8000
 
 
@@ -45,7 +43,9 @@ class Dhash(commands.Cog):
 
     @commands.check(check.acl)
     @dhash.command(name="add")
-    async def dhash_add(self, ctx, channel: discord.TextChannel):
+    async def dhash_add(
+        self, ctx, channel: discord.TextChannel, reaction_limit: int = 5
+    ):
         hash_channel = HashChannel.get(ctx.guild.id, channel.id)
         if hash_channel:
             await ctx.send(
@@ -56,17 +56,53 @@ class Dhash(commands.Cog):
             )
             return
 
-        hash_channel = HashChannel.add(ctx.guild.id, channel.id)
+        hash_channel = HashChannel.add(ctx.guild.id, channel.id, reaction_limit)
         await ctx.send(
             _(
                 ctx,
-                "Channel {channel} added as hash channel.",
-            ).format(channel=channel.mention)
+                "Channel {channel} added as hash channel with {reaction_limit} reaction limit.",
+            ).format(channel=channel.mention, reaction_limit=reaction_limit)
         )
         await guild_log.info(
             ctx.author,
             ctx.channel,
             f"Channel #{channel.name} set as hash channel.",
+        )
+
+    @commands.check(check.acl)
+    @dhash.command(name="limit")
+    async def dhash_limit(self, ctx, channel: discord.TextChannel, reaction_limit: int):
+        hash_channel = HashChannel.get(ctx.guild.id, channel.id)
+
+        if not hash_channel:
+            await ctx.send(
+                _(
+                    ctx,
+                    "{channel} is not hash channel.",
+                ).format(channel=channel.mention)
+            )
+            return
+
+        if reaction_limit < 1:
+            await ctx.send(
+                _(
+                    ctx,
+                    "Reaction limit must be higher than 0.",
+                ).format(channel=channel.mention)
+            )
+            return
+
+        hash_channel.change_reaction_limit(reaction_limit)
+        await ctx.send(
+            _(
+                ctx,
+                "Changed reaction limit for {channel} to {reaction_limit}.",
+            ).format(channel=channel.mention, reaction_limit=reaction_limit)
+        )
+        await guild_log.info(
+            ctx.author,
+            ctx.channel,
+            f"Changed reaction limit for channel #{channel.name} to {reaction_limit}.",
         )
 
     @commands.check(check.acl)
@@ -218,7 +254,10 @@ class Dhash(commands.Cog):
         if not self._in_repost_channel(message):
             return
 
-        if self.embed_cache[message.id]:
+        if message.author == self.bot.user:
+            return
+
+        if message.id in self.embed_cache:
             try:
                 report = await message.channel.fetch_message(
                     self.embed_cache[message.id]
@@ -272,21 +311,6 @@ class Dhash(commands.Cog):
         if emoji != "❎":
             return
 
-        try:
-            repost_message_id = int(
-                reaction.message.embeds[0].footer.text.split(" | ")[1]
-            )
-            repost_message = await reaction.message.channel.fetch_message(
-                repost_message_id
-            )
-        except discord.errors.HTTPException as exc:
-            return await bot_log.error(
-                "Could not find repost message {msg_id} at guild {guild}".format(
-                    msg_id=reaction.message.id, guild=reaction.guild.id
-                ),
-                exception=exc,
-            )
-
         for report_reaction in reaction.message.reactions:
             if str(report_reaction) != "❎":
                 continue
@@ -294,13 +318,23 @@ class Dhash(commands.Cog):
             if (
                 emoji == "❎"
                 and str(report_reaction) == "❎"
-                and report_reaction.count > NOT_DUPLICATE_LIMIT
+                and report_reaction.count
+                > HashChannel.get_limit(
+                    reaction.message.guild.id, reaction.message.channel.id
+                )
             ):
                 # remove bot's reaction, it is not a repost
+
                 try:
+                    repost_message_id = int(
+                        reaction.message.embeds[0].footer.text.split(" | ")[1]
+                    )
+                    repost_message = await reaction.message.channel.fetch_message(
+                        repost_message_id
+                    )
                     await repost_message.remove_reaction("♻️", self.bot.user)
-                    await repost_message.remove_reaction("🤷🏻", self.bot.user)
-                    await repost_message.remove_reaction("🤔", self.bot.user)
+                    await repost_message.remove_reaction("♻️", self.bot.user)
+                    await repost_message.remove_reaction("♻️", self.bot.user)
                 except discord.errors.HTTPException as exc:
                     return await bot_log.error(
                         "Could not delete bot reactions from message {msg_id} at guild {guild}".format(
@@ -400,7 +434,7 @@ class Dhash(commands.Cog):
         original: The original attachment.
         distance: Hamming distance between the original and repost.
         """
-        (tc,) = TranslationContext(message.guild.id, message.author.id)
+        tc = TranslationContext(message.guild.id, message.author.id)
 
         if distance <= LIMIT_FULL:
             level = _(tc, "**♻️ This is repost!**")
@@ -442,14 +476,20 @@ class Dhash(commands.Cog):
             name=_(tc, "Hint"),
             value=_(
                 tc,
-                " _If image is repost, give it ♻️ reaction. If it's not, click here on ❎ and when we reach {limit} reactions, this message will be deleted._",
+                "_If image is repost, give it ♻️ reaction. "
+                "If it's not, click here on ❎ and when we reach {limit} reactions, "
+                "this message will be deleted._",
             ).format(
-                limit=NOT_DUPLICATE_LIMIT,
+                limit=HashChannel.get_limit(message.guild.id, message.channel.id),
             ),
             inline=False,
         )
         embed.set_footer(text=f"{message.author.id} | {message.id}")
+
         report = await message.reply(embed=embed)
+
+        self.embed_cache[message.id] = report.id
+
         await report.add_reaction("❎")
 
 

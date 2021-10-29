@@ -106,22 +106,33 @@ class HashChannel(database.base):
     __tablename__ = "fun_dhash_channels"
 
     idx = Column(Integer, primary_key=True, autoincrement=True)
-    guild_id = Column(BigInteger)
-    channel_id = Column(BigInteger)
+    guild_id = Column(BigInteger, nullable=False)
+    channel_id = Column(BigInteger, nullable=False)
+    reaction_limit = Column(Integer, nullable=False)
 
     __table_args__ = (UniqueConstraint(guild_id, channel_id),)
 
-    def add(guild_id: int, channel_id: int) -> HashChannel:
+    @staticmethod
+    def add(guild_id: int, channel_id: int, reaction_limit: int = 5) -> HashChannel:
         existing = HashChannel.get(guild_id, channel_id)
 
         if existing:
             return existing
 
-        channel = HashChannel(guild_id=guild_id, channel_id=channel_id)
+        channel = HashChannel(
+            guild_id=guild_id, channel_id=channel_id, reaction_limit=reaction_limit
+        )
         session.add(channel)
         session.commit()
         return channel
 
+    @staticmethod
+    def change_reaction_limit(self, reaction_limit: int):
+        self.reaction_limit = reaction_limit
+
+        session.commit()
+
+    @staticmethod
     def get(guild_id: int, channel_id: int) -> Optional[HashChannel]:
         query = (
             session.query(HashChannel)
@@ -130,10 +141,22 @@ class HashChannel(database.base):
         )
         return query
 
+    @staticmethod
+    def get_limit(guild_id: int, channel_id: int) -> int:
+        query = (
+            session.query(HashChannel)
+            .filter_by(guild_id=guild_id, channel_id=channel_id)
+            .one_or_none()
+        )
+
+        return None if query is None else query.reaction_limit
+
+    @staticmethod
     def get_all(guild_id: int) -> List[HashChannel]:
         query = session.query(HashChannel).filter_by(guild_id=guild_id).all()
         return query
 
+    @staticmethod
     def remove(guild_id: int, channel_id: int):
         query = (
             session.query(HashChannel)
