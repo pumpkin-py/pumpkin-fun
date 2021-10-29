@@ -60,13 +60,13 @@ class Dhash(commands.Cog):
         await ctx.send(
             _(
                 ctx,
-                "Channel {channel} added as hash channel with {reaction_limit} reaction limit.",
+                "Channel {channel} added as hash channel with reaction limit **{reaction_limit}**.",
             ).format(channel=channel.mention, reaction_limit=reaction_limit)
         )
         await guild_log.info(
             ctx.author,
             ctx.channel,
-            f"Channel #{channel.name} set as hash channel.",
+            f"Channel #{channel.name} set as hash channel with reaction limit {reation_limit}.",
         )
 
     @commands.check(check.acl)
@@ -96,7 +96,7 @@ class Dhash(commands.Cog):
         await ctx.send(
             _(
                 ctx,
-                "Changed reaction limit for {channel} to {reaction_limit}.",
+                "Changed reaction limit for {channel} to **{reaction_limit}**.",
             ).format(channel=channel.mention, reaction_limit=reaction_limit)
         )
         await guild_log.info(
@@ -108,7 +108,7 @@ class Dhash(commands.Cog):
     @commands.check(check.acl)
     @dhash.command(name="list")
     async def dhash_list(self, ctx):
-        hash_channels = HashChannel.get_by_channel(ctx.guild.id)
+        hash_channels = HashChannel.get_all(ctx.guild.id)
         if not hash_channels:
             await ctx.reply(_(ctx, "This server has no hash channels."))
             return
@@ -119,7 +119,7 @@ class Dhash(commands.Cog):
         result = []
         for hash_channel, channel in zip(hash_channels, channels):
             name = getattr(channel, "name", "???")
-            line = f"#{name:<{column_name_width}} {hash_channel.channel_id}"
+            line = f"#{name:<{column_name_width}} {hash_channel.channel_id} {hash_channel.reaction_limit}"
             result.append(line)
 
         await ctx.reply("```" + "\n".join(result) + "```")
