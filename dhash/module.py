@@ -25,6 +25,7 @@ MAX_ATTACHMENT_SIZE = 8000
 class Dhash(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.embed_cache = {}
 
     def _in_repost_channel(self, message: discord.Message) -> bool:
         channel = HashChannel.get(message.guild.id, message.channel.id)
@@ -216,6 +217,20 @@ class Dhash(commands.Cog):
     async def on_message_delete(self, message: discord.Message):
         if not self._in_repost_channel(message):
             return
+            
+        if self.embed_cache[message.id]:
+            try:
+                report = await message.channel.fetch_message(self.embed_cache[message.id])
+                await report.delete()
+            except discord.errors.HTTPException as exc:
+                await bot_log.error(
+                    "Could not delete repost embed {msg_id} at guild {guild} using cache".format(
+                        msg_id=message.id, guild=message.guild.id
+                    ),
+                    exception=exc,
+                )
+            self.embed_cache.pop(message.id)
+            return
 
         # try to detect and delete repost embed
         messages = await message.channel.history(
@@ -383,16 +398,16 @@ class Dhash(commands.Cog):
         original: The original attachment.
         distance: Hamming distance between the original and repost.
         """
-        tx = TranslationContext(message.guild.id, message.author.id)
+        tc, = TranslationContext(message.guild.id, message.author.id)
 
         if distance <= LIMIT_FULL:
-            level = _(tx, "**♻️ This is repost!**")
+            level = _(tc,, "**♻️ This is repost!**")
             await message.add_reaction("♻️")
         elif distance <= LIMIT_HARD:
-            level = _(tx, "**♻️ This is probably repost!**")
+            level = _(tc,, "**♻️ This is probably repost!**")
             await message.add_reaction("♻")
         else:
-            level = _(tx, "🤷🏻 This could be repost.")
+            level = _(tc,, "🤷🏻 This could be repost.")
             await message.add_reaction("♻")
 
         similarity = "{:.1f} %".format((1 - distance / 128) * 100)
@@ -408,7 +423,7 @@ class Dhash(commands.Cog):
         except discord.errors.NotFound:
             link = "404 😿"
 
-        description = _(tx, "{name}, matching **{similarity}**!").format(
+        description = _(tc,, "{name}, matching **{similarity}**!").format(
             name=discord.utils.escape_markdown(message.author.display_name),
             similarity=similarity,
         )
@@ -416,15 +431,15 @@ class Dhash(commands.Cog):
         embed = utils.Discord.create_embed(title=level, description=description)
 
         embed.add_field(
-            name=_(tx, "Original"),
+            name=_(tc,, "Original"),
             value=link,
             inline=False,
         )
 
         embed.add_field(
-            name=_(tx, "Hint"),
+            name=_(tc,, "Hint"),
             value=_(
-                tx,
+                tc,,
                 " _If image is repost, give it ♻️ reaction. If it's not, click here on ❎ and when we reach {limit} reactions, this message will be deleted._",
             ).format(
                 limit=NOT_DUPLICATE_LIMIT,
