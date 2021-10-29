@@ -64,11 +64,8 @@ msgstr Staženo **{count}** zpráv
 msgid Message **`{message_id}`**
 msgstr Zpráva **`{message_id}`**
 
-msgid > `{hash}`
-msgstr > `{hash}`
-
-msgid Messages has no associtated hashes
-msgstr Zpráva nemá přiřazeny žádné hashe
+msgid Messages has no associtated hashes.
+msgstr Zprávy nemají žádné přiřazené hashe
 
 msgid **♻️ This is repost!**
 msgstr **♻️ Toto je repost!**

@@ -64,10 +64,7 @@ msgstr
 msgid Message **`{message_id}`**
 msgstr
 
-msgid > `{hash}`
-msgstr
-
-msgid Messages has no associtated hashes
+msgid Messages has no associtated hashes.
 msgstr
 
 msgid **♻️ This is repost!**
