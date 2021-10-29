@@ -66,7 +66,7 @@ class Dhash(commands.Cog):
         await guild_log.info(
             ctx.author,
             ctx.channel,
-            f"Channel #{channel.name} set as hash channel with reaction limit {reation_limit}.",
+            f"Channel #{channel.name} set as hash channel with reaction limit {reaction_limit}.",
         )
 
     @commands.check(check.acl)
