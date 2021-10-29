@@ -305,41 +305,27 @@ class Dhash(commands.Cog):
         """Handle 'This is a repost' report.
         The footer contains reposter's user ID and repost message id.
         """
-        print("Event!")
-
         hash_channel = HashChannel.get(payload.guild_id, payload.channel_id)
 
         if not hash_channel:
-            print("Not hash channel!")
             return
         if payload.member.bot:
-            print("User = bot")
             return
 
         emoji = str(payload.emoji)
 
-        print("Emoji: {}", emoji)
-
         if emoji != "❎":
             return
-            
+
         channel = await self.bot.fetch_channel(payload.channel_id)
         message = await channel.fetch_message(payload.message_id)
 
         if not message.author.bot:
-            print("Message author not bot!")
             return
 
         for report_reaction in message.reactions:
             if str(report_reaction) != "❎":
-                print("Rep. reaction: {}", report_reaction)
                 continue
-
-            print(
-                "Count: {}, Limit: {}",
-                report_reaction.count,
-                hash_channel.reaction_limit,
-            )
 
             if report_reaction.count > hash_channel.reaction_limit:
                 # remove bot's reaction, it is not a repost
@@ -348,8 +334,6 @@ class Dhash(commands.Cog):
                     repost_message_id = int(
                         message.embeds[0].footer.text.split(" | ")[1]
                     )
-
-                    print("Message id: {}", repost_message_id)
 
                     repost_message = await message.channel.fetch_message(
                         repost_message_id
