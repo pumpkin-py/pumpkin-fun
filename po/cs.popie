@@ -77,7 +77,7 @@ msgid Processed **{messages}** messages.
 msgstr Zpracováno **{messages}** zpráv.
 
 msgid Calculated **{hashes}** image hashes in **{seconds}** seconds.
-msgstr Vypočítáno **{hashes}** hashů obrázků za **{second}** sekund.
+msgstr Vypočítáno **{hashes}** hashů obrázků za **{seconds}** sekund.
 
 msgid Message **`{message_id}`**
 msgstr Zpráva **`{message_id}`**
