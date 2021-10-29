@@ -265,6 +265,8 @@ class Dhash(commands.Cog):
                 await report.delete()
             except discord.errors.HTTPException as exc:
                 await bot_log.error(
+                    message.author,
+                    message,
                     "Could not delete repost embed {msg_id} at guild {guild} using cache".format(
                         msg_id=message.id, guild=message.guild.id
                     ),
@@ -289,6 +291,8 @@ class Dhash(commands.Cog):
                 await report.delete()
             except discord.errors.HTTPException as exc:
                 await bot_log.error(
+                    message.author,
+                    message,
                     "Could not delete repost embed {msg_id} at guild {guild}".format(
                         msg_id=message.id, guild=message.guild.id
                     ),
@@ -337,6 +341,8 @@ class Dhash(commands.Cog):
                     await repost_message.remove_reaction("♻️", self.bot.user)
                 except discord.errors.HTTPException as exc:
                     return await bot_log.error(
+                        reaction.message.author,
+                        reaction.message,
                         "Could not delete bot reactions from message {msg_id} at guild {guild}".format(
                             msg_id=reaction.message.id, guild=reaction.guild.id
                         ),
