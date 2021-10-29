@@ -126,7 +126,7 @@ class HashChannel(database.base):
         session.commit()
         return channel
 
-    def change_reaction_limit(self, reaction_limit: int):
+    def set_limit(self, reaction_limit: int):
         self.reaction_limit = reaction_limit
 
         session.commit()
@@ -139,16 +139,6 @@ class HashChannel(database.base):
             .one_or_none()
         )
         return query
-
-    @staticmethod
-    def get_limit(guild_id: int, channel_id: int) -> int:
-        query = (
-            session.query(HashChannel)
-            .filter_by(guild_id=guild_id, channel_id=channel_id)
-            .one_or_none()
-        )
-
-        return None if query is None else query.reaction_limit
 
     @staticmethod
     def get_all(guild_id: int) -> List[HashChannel]:

@@ -92,7 +92,7 @@ class Dhash(commands.Cog):
             )
             return
 
-        hash_channel.change_reaction_limit(reaction_limit)
+        hash_channel.set_limit(reaction_limit)
         await ctx.send(
             _(
                 ctx,
@@ -317,7 +317,7 @@ class Dhash(commands.Cog):
         if emoji != "❎":
             return
 
-        channel = await self.bot.fetch_channel(payload.channel_id)
+        channel = self.bot.get_guild(payload.guild_id).get_channel(payload.channel_id)
         message = await channel.fetch_message(payload.message_id)
 
         if not message.author.bot:
@@ -338,8 +338,6 @@ class Dhash(commands.Cog):
                     repost_message = await message.channel.fetch_message(
                         repost_message_id
                     )
-                    await repost_message.remove_reaction("♻️", self.bot.user)
-                    await repost_message.remove_reaction("♻️", self.bot.user)
                     await repost_message.remove_reaction("♻️", self.bot.user)
                 except discord.errors.HTTPException as exc:
                     return await bot_log.error(
@@ -446,13 +444,12 @@ class Dhash(commands.Cog):
 
         if distance <= LIMIT_FULL:
             level = _(tc, "**♻️ This is repost!**")
-            await message.add_reaction("♻️")
         elif distance <= LIMIT_HARD:
             level = _(tc, "**♻️ This is probably repost!**")
-            await message.add_reaction("♻")
         else:
             level = _(tc, "🤷🏻 This could be repost.")
-            await message.add_reaction("♻")
+
+        await message.add_reaction("♻")
 
         similarity = "{:.1f} %".format((1 - distance / 128) * 100)
         timestamp = utils.Time.id_to_datetime(original.attachment_id).strftime(
@@ -488,7 +485,9 @@ class Dhash(commands.Cog):
                 "If it's not, click here on ❎ and when we reach {limit} reactions, "
                 "this message will be deleted._",
             ).format(
-                limit=HashChannel.get_limit(message.guild.id, message.channel.id),
+                limit=HashChannel.get(
+                    message.guild.id, message.channel.id
+                ).reaction_limit,
             ),
             inline=False,
         )
