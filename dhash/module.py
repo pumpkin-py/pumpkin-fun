@@ -168,7 +168,7 @@ class Dhash(commands.Cog):
                 + "\n"
                 + _(
                     ctx,
-                    "calculated **{hashes}** image hashes in **{seconds}** seconds.",
+                    "Calculated **{hashes}** image hashes in **{seconds}** seconds.",
                 )
             ).format(
                 messages=len(messages),

@@ -61,6 +61,24 @@ msgstr
 msgid Downloaded **{count}** messages.
 msgstr
 
+msgid **SCANNING**
+msgstr
+
+mgsid Processed **{count}** out of **{total}** messages ({percent} %).
+msgstr
+
+msgid Calculated **{hashes}** hashes.
+msgstr
+
+msgid **COMPLETED**
+msgstr
+
+msgid Processed **{messages}** messages.
+msgstr
+
+msgid Calculated **{hashes}** image hashes in **{seconds}** seconds.
+msgstr
+
 msgid Message **`{message_id}`**
 msgstr
 
