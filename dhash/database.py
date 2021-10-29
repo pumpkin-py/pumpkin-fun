@@ -126,7 +126,6 @@ class HashChannel(database.base):
         session.commit()
         return channel
 
-    @staticmethod
     def change_reaction_limit(self, reaction_limit: int):
         self.reaction_limit = reaction_limit
 
