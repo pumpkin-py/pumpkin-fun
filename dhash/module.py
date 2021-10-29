@@ -299,13 +299,9 @@ class Dhash(commands.Cog):
                     exception=exc,
                 )
             break
-            
-    @commands.Cog.listener()
-    async def on_raw_reaction_add(self, payload):
-        print("EVENT 2!")
 
     @commands.Cog.listener()
-    async def on_reaction_add(self, reaction, user):
+    async def on_raw_reaction_add(self, payload):
         """Handle 'This is a repost' report.
         The footer contains reposter's user ID and repost message id.
         """
@@ -318,11 +314,8 @@ class Dhash(commands.Cog):
         if not hash_channel:
             print("Not hash channel!")
             return
-        if user.bot:
+        if payload.member.bot:
             print("User = bot")
-            return
-        if not reaction.message.author.bot:
-            print("Message author not bot!")
             return
 
         emoji = str(reaction.emoji)
@@ -332,9 +325,13 @@ class Dhash(commands.Cog):
         if emoji != "❎":
             return
 
+        if not message.author.bot:
+            print("Message author not bot!")
+            return
+
         print("Checking")
 
-        for report_reaction in reaction.message.reactions:
+        for report_reaction in message.reactions:
             if str(report_reaction) != "❎":
                 print("Rep. reaction: {}", report_reaction)
                 continue
@@ -342,7 +339,7 @@ class Dhash(commands.Cog):
             print(
                 "Count: {}, Limit: {}",
                 report_reaction.count,
-                hash_channel.limit,
+                hash_channel.reaction_limit,
             )
 
             if report_reaction.count > hash_channel.limit:
@@ -350,12 +347,12 @@ class Dhash(commands.Cog):
 
                 try:
                     repost_message_id = int(
-                        reaction.message.embeds[0].footer.text.split(" | ")[1]
+                        message.embeds[0].footer.text.split(" | ")[1]
                     )
 
                     print("Message id: {}", repost_message_id)
 
-                    repost_message = await reaction.message.channel.fetch_message(
+                    repost_message = await message.channel.fetch_message(
                         repost_message_id
                     )
                     await repost_message.remove_reaction("♻️", self.bot.user)
@@ -363,14 +360,14 @@ class Dhash(commands.Cog):
                     await repost_message.remove_reaction("♻️", self.bot.user)
                 except discord.errors.HTTPException as exc:
                     return await bot_log.error(
-                        reaction.message.author,
-                        reaction.message,
+                        message.author,
+                        message,
                         "Could not delete bot reactions from message {msg_id} at guild {guild}".format(
-                            msg_id=reaction.message.id, guild=reaction.guild.id
+                            msg_id=message.id, guild=guild.id
                         ),
                         exception=exc,
                     )
-                return await utils.Discord.delete(reaction.message)
+                return await utils.Discord.delete(message)
 
     # Helper functions
 
