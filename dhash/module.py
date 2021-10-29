@@ -308,7 +308,7 @@ class Dhash(commands.Cog):
         print("Event!")
 
         hash_channel = HashChannel.get(
-            reaction.message.guild.id, reaction.message.channel.id
+            payload.guild_id, payload.channel_id
         )
 
         if not hash_channel:
