@@ -346,7 +346,7 @@ class Dhash(commands.Cog):
                         message.author,
                         message,
                         "Could not delete bot reactions from message {msg_id} at guild {guild}".format(
-                            msg_id=message.id, guild=guild.id
+                            msg_id=message.id, guild=message.guild.id
                         ),
                         exception=exc,
                     )
