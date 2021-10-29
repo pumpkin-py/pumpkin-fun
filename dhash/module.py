@@ -299,6 +299,10 @@ class Dhash(commands.Cog):
                     exception=exc,
                 )
             break
+            
+    @commands.Cog.listener()
+    async def on_raw_reaction_add(self, payload):
+        print("EVENT 2!")
 
     @commands.Cog.listener()
     async def on_reaction_add(self, reaction, user):
