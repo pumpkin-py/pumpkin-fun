@@ -341,7 +341,7 @@ class Dhash(commands.Cog):
                 hash_channel.reaction_limit,
             )
 
-            if report_reaction.count > hash_channel.limit:
+            if report_reaction.count > hash_channel.reaction_limit:
                 # remove bot's reaction, it is not a repost
 
                 try:
