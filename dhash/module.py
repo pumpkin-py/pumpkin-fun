@@ -322,12 +322,13 @@ class Dhash(commands.Cog):
 
         if emoji != "❎":
             return
+            
+        channel = await self.bot.fetch_channel(payload.channel_id)
+        message = await channel.fetch_message(payload.message_id)
 
         if not message.author.bot:
             print("Message author not bot!")
             return
-
-        print("Checking")
 
         for report_reaction in message.reactions:
             if str(report_reaction) != "❎":
