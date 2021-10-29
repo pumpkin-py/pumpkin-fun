@@ -307,9 +307,7 @@ class Dhash(commands.Cog):
         """
         print("Event!")
 
-        hash_channel = HashChannel.get(
-            payload.guild_id, payload.channel_id
-        )
+        hash_channel = HashChannel.get(payload.guild_id, payload.channel_id)
 
         if not hash_channel:
             print("Not hash channel!")
@@ -318,7 +316,7 @@ class Dhash(commands.Cog):
             print("User = bot")
             return
 
-        emoji = str(reaction.emoji)
+        emoji = str(payload.emoji)
 
         print("Emoji: {}", emoji)
 
