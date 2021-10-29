@@ -366,7 +366,7 @@ class Dhash(commands.Cog):
                         ),
                         exception=exc,
                     )
-                return await utils.Discord.delete(message)
+                return await utils.Discord.delete_message(message)
 
     # Helper functions
 
