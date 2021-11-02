@@ -335,10 +335,12 @@ class Dhash(commands.Cog):
                         message.embeds[0].footer.text.split(" | ")[1]
                     )
 
+                    self.embed_cache.pop(repost_massage_id)
+
                     repost_message = await message.channel.fetch_message(
                         repost_message_id
                     )
-                    await repost_message.remove_reaction("♻️", self.bot.user)
+                    await repost_message.remove_reaction("♻", self.bot.user)
                 except discord.errors.HTTPException as exc:
                     return await bot_log.error(
                         message.author,
@@ -443,9 +445,9 @@ class Dhash(commands.Cog):
         tc = TranslationContext(message.guild.id, message.author.id)
 
         if distance <= LIMIT_FULL:
-            level = _(tc, "**♻️ This is repost!**")
+            level = _(tc, "**♻ This is repost!**")
         elif distance <= LIMIT_HARD:
-            level = _(tc, "**♻️ This is probably repost!**")
+            level = _(tc, "**♻ This is probably repost!**")
         else:
             level = _(tc, "🤷🏻 This could be repost.")
 
