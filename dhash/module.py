@@ -342,6 +342,8 @@ class Dhash(commands.Cog):
                         repost_message_id
                     )
                     
+                    print(repost_message)
+                    
                     await repost_message.remove_reaction("♻️", self.bot.user)
                 except discord.errors.HTTPException as exc:
                     return await bot_log.error(
