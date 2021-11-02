@@ -335,7 +335,8 @@ class Dhash(commands.Cog):
                         message.embeds[0].footer.text.split(" | ")[1]
                     )
 
-                    self.embed_cache.pop(repost_message_id)
+                    if self.embed_cache[repost_message_id]
+                        self.embed_cache.pop(repost_message_id)
 
                     repost_message = await message.channel.fetch_message(
                         repost_message_id
