@@ -254,28 +254,26 @@ class Dhash(commands.Cog):
         if not self._in_repost_channel(message):
             return
 
+        # delete repost embed if we have the report message cached
+
         if message.author == self.bot.user:
             return
 
         if message.id in self.embed_cache:
             try:
-                report = await message.channel.fetch_message(
-                    self.embed_cache[message.id]
-                )
+                report = self.embed_cache[message.id]
                 await report.delete()
             except discord.errors.HTTPException as exc:
                 await bot_log.error(
                     message.author,
                     message,
-                    "Could not delete repost embed {msg_id} at guild {guild} using cache".format(
-                        msg_id=message.id, guild=message.guild.id
-                    ),
+                    f"Could not delete repost embed {msg_id} at guild {guild} using cache.",
                     exception=exc,
                 )
             self.embed_cache.pop(message.id)
             return
 
-        # try to detect and delete repost embed
+        # try to find and delete repost report embed, because we don't have it cached
         messages = await message.channel.history(
             after=message, limit=3, oldest_first=True
         ).flatten()
@@ -499,7 +497,7 @@ class Dhash(commands.Cog):
 
         report = await message.reply(embed=embed)
 
-        self.embed_cache[message.id] = report.id
+        self.embed_cache[message.id] = report
 
         await report.add_reaction("❎")
 
