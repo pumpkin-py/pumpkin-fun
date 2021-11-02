@@ -267,7 +267,7 @@ class Dhash(commands.Cog):
                 await bot_log.error(
                     message.author,
                     message,
-                    f"Could not delete repost embed {msg_id} at guild {guild} using cache.",
+                    f"Could not delete repost embed {message.id} at guild {message.guild.id} using cache.",
                     exception=exc,
                 )
             self.embed_cache.pop(message.id)
