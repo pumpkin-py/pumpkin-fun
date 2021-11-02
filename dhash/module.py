@@ -340,7 +340,10 @@ class Dhash(commands.Cog):
                     repost_message = await message.channel.fetch_message(
                         repost_message_id
                     )
-                    await repost_message.remove_reaction("♻", self.bot.user)
+                    
+                    print(repost_message)
+                    
+                    await repost_message.remove_reaction("♻️", self.bot.user)
                 except discord.errors.HTTPException as exc:
                     return await bot_log.error(
                         message.author,
