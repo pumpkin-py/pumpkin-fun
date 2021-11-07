@@ -5,7 +5,6 @@ from datetime import datetime
 import dateutil.parser as dparser
 from urllib import parse as url_parse
 
-from discord import Colour
 from discord.ext import commands
 
 from core import utils, i18n
