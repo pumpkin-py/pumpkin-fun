@@ -725,7 +725,7 @@ class Meme(commands.Cog):
             frame_avatar = Image.fromarray(
                 ImageUtils.shift_hue(avatar.resize((64, 64)), deform_hue)
             )
-            frame_object = Image.open(DATA_DIR / f"hyperlick/{img}.png")
+            frame_object = Image.open(DATA_DIR / f"lick/{img}.png")
 
             frame = Image.new("RGBA", (width, height), (54, 57, 63, 1))
             frame.paste(frame_object, (10, 15), frame_object)
