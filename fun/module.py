@@ -713,7 +713,7 @@ class Meme(commands.Cog):
         """Get frames for the hyperlick"""
         frames = []
         width, height = 270, 136
-        voffset = (0, 2, 1, 2)
+        voffset = (0, 3, -1, 3)
         hoffset = (-2, 0, 2, 0)
 
         avatar = ImageUtils.round_image(avatar.resize((100, 100)))
