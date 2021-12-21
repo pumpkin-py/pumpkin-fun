@@ -723,7 +723,7 @@ class Meme(commands.Cog):
             img = ("01", "02", "03", "02")[i]
             deform_hue = random.randint(0, 99) ** (i + 1) // 100 ** i / 100
             frame_avatar = Image.fromarray(
-                ImageUtils.shift_hue(avatar_pixels, deform_hue)
+                ImageUtils.shift_hue(avatar.resize((64, 64)), deform_hue)
             )
             frame_object = Image.open(DATA_DIR / f"hyperlick/{img}.png")
 
