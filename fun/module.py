@@ -716,14 +716,14 @@ class Meme(commands.Cog):
         voffset = (0, 3, -1, 3)
         hoffset = (-2, 0, 2, 0)
 
-        avatar = ImageUtils.round_image(avatar.resize((100, 100)))
+        avatar = ImageUtils.round_image(avatar.resize((64, 64)))
         avatar_pixels = np.array(avatar)
 
         for i in range(4):
             img = ("01", "02", "03", "02")[i]
             deform_hue = random.randint(0, 99) ** (i + 1) // 100 ** i / 100
             frame_avatar = Image.fromarray(
-                ImageUtils.shift_hue(avatar.resize((64, 64)), deform_hue)
+                ImageUtils.shift_hue(avatar_pixels, deform_hue)
             )
             frame_object = Image.open(DATA_DIR / f"lick/{img}.png")
 
