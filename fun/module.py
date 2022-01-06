@@ -34,7 +34,9 @@ class Meme(commands.Cog):
     @commands.command()
     async def hug(self, ctx, *, user: Union[nextcord.Member, nextcord.Role] = None):
         """Hug someone"""
-        if user is not None and user.id not in [m.id for m in ctx.channel.members]:
+        if type(user) is nextcord.Member and user.id not in [
+            m.id for m in ctx.channel.members
+        ]:
             await ctx.reply(_(ctx, "You can't do that, they are not in this channel."))
             return
 
@@ -331,7 +333,9 @@ class Meme(commands.Cog):
     @commands.command()
     async def slap(self, ctx, *, user: Union[nextcord.Member, nextcord.Role] = None):
         """Slap someone"""
-        if user is not None and user.id not in [m.id for m in ctx.channel.members]:
+        if type(user) is nextcord.Member and user.id not in [
+            m.id for m in ctx.channel.members
+        ]:
             await ctx.reply(_(ctx, "You can't do that, they are not in this channel."))
             return
 
