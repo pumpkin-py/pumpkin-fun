@@ -1,9 +1,10 @@
 from typing import Optional
+import requests
 
 from nextcord.ext import commands
 
 import pie.database.config
-from pie import check, i18n, logger
+from pie import check, i18n, logger, utils
 
 from .database import Place
 
@@ -17,6 +18,29 @@ class Weather(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
+
+    @staticmethod
+    def _create_embeds(ctx, url):
+        # create embeds
+        request = requests.get(url)
+        if request.status_code != 200:
+            return utils.discord.create_embed(
+                author=ctx.message.author,
+                title="Error occured while getting weather info.",
+                error=True,
+            )
+        data = request.json()
+        em1 = utils.discord.create_embed(
+            author=ctx.message.author,
+            title="Current weather",
+        )
+        em1.add_field(name="Feels like:", value=data['current_condition'][0]['FeelsLikeC'], inline=True)
+        em2 = utils.discord.create_embed(
+            author=ctx.message.author,
+            title="Current weather",
+        )
+        em2.add_field(name="Feels like:", value=data['current_condition'][0]['temp_C'], inline=True)
+        return [em1, em2]
 
     @commands.guild_only()
     @commands.check(check.acl)
@@ -98,9 +122,14 @@ class Weather(commands.Cog):
             await ctx.reply(_(ctx, "You have to specify a place or set a preference."))
             return
 
-        await ctx.reply(name)
+        url = f"https://wttr.in/{name}?format=j1"
 
-    #
+        embeds = self._create_embeds(ctx, url)
+        if not isinstance(embeds, list):
+            await ctx.reply(embed=embeds)
+            return
+        scrollEmbed = utils.ScrollableEmbed(ctx, embeds)
+        await scrollEmbed.scroll()
 
     def _place_is_valid(self, name: str) -> bool:
         if "&" in name:
