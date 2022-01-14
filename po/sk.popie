@@ -216,3 +216,36 @@ msgstr Počet strán
 
 msgid Supply me with a magic number and I will give you what you desire
 msgstr Dodaj mi kúzelné číslo a ja ti dám, čo si praješ.
+
+msgid Weather forecast for _{date}_ in _{place}_
+msgstr Predpoveď počasia na _{date}_ pre _{place}_
+
+msgid Temperature: **{temp}** ˚C
+msgstr Teplota: **{temp}** ˚C
+
+msgid Feels like: **{feel}** ˚C
+msgstr Pocitová teplota: **{feel}** ˚C
+
+msgid Wind speed: **{speed}** km/h
+msgstr Rýchlosť vetra: **{speed}** km/h
+
+msgid Chance of rain: **{chance}** %
+msgstr Pravdepodobnosť zrážok: **{chance}** %
+
+msgid Weather map for today
+msgstr Mapa počasia na dnes
+
+msgid Morning
+msgstr Ráno
+
+msgid Day
+msgstr Deň
+
+msgid Evening
+msgstr Večer
+
+msgid Night
+msgstr Noc
+
+msgid An error occured while getting weather info.
+msgstr Pri získavaní počasia nastala chyba.

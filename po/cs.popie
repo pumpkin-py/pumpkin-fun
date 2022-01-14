@@ -216,3 +216,33 @@ msgstr Počet stran
 
 msgid Supply me with a magic number and I will give you what you desire
 msgstr Dodej mi kouzelné číslo a já ti dám, co si přeješ.
+
+msgid Weather forecast for {date} in {place}
+msgstr 
+
+msgid Temperature: **{temp}** ˚C
+msgstr
+
+msgid Feels like: **{feel}** ˚C
+msgstr
+
+msgid Wind speed: **{speed}** km/h
+msgstr
+
+msgid Chance of rain: **{chance}** %
+msgstr
+
+msgid Weather map for today
+msgstr
+
+msgid Morning
+msgstr
+
+msgid Day
+msgstr
+
+msgid Evening
+msgstr
+
+msgid Night
+msgstr
