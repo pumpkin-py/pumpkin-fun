@@ -1,6 +1,5 @@
 from typing import Optional
-import requests
-from requests.exceptions import JSONDecodeError
+import aiohttp
 
 import nextcord
 from nextcord.ext import commands
@@ -80,15 +79,21 @@ class Weather(commands.Cog):
             weather.append(day_dict)
         return weather
 
-    def _create_embeds(
+    async def _create_embeds(
         self, ctx: commands.Context, name: str, lang_preference: str
     ) -> list[nextcord.Embed]:
         """create embeds for scrollable embed"""
         url = f"https://wttr.in/{name}?format=j1&lang={lang_preference}"
-        request = requests.get(url)
-        # check status code of request for failures (lazy way)
-        if request.status_code != 200:
-            # return error embed
+        try:
+            async with aiohttp.ClientSession() as session:
+                async with session.get(url) as resp:
+                    resp_json = await resp.json()
+        except aiohttp.ClientResponseError as e:
+            await guild_log.warning(
+                ctx.author,
+                ctx.channel,
+                f'An error occured while getting weather info, err code "{e.code}"',
+            )
             return [
                 utils.discord.create_embed(
                     author=ctx.message.author,
@@ -96,58 +101,54 @@ class Weather(commands.Cog):
                     error=True,
                 )
             ]
+        else:
+            # create day embeds
+            days = self._get_useful_data(resp_json, ctx, lang_preference)
+            embeds = []
+            for day in days:
+                embed = utils.discord.create_embed(
+                    author=ctx.message.author,
+                    title=_(ctx, "Weather forecast for _{date}_ in _{place}_").format(
+                        date=day["date"], place=day["nearest_place"]
+                    ),
+                )
+                for day_phase, weather_info in day.items():
+                    # skip 'date' and 'nearest_place' strings
+                    if type(weather_info) == str:
+                        continue
+                    temp_str = _(ctx, "Temperature: **{temp}** ˚C").format(
+                        temp=weather_info["temp"]
+                    )
+                    feel_str = _(ctx, "Feels like: **{feel}** ˚C").format(
+                        feel=weather_info["feels_like"]
+                    )
+                    wind_str = _(ctx, "Wind speed: **{speed}** km/h").format(
+                        speed=weather_info["wind_speed"]
+                    )
+                    rain_str = _(ctx, "Chance of rain: **{chance}** %").format(
+                        chance=weather_info["rain_chance"]
+                    )
+                    info_str = f"""
+                        - {temp_str}
+                        - {feel_str}
+                        - {wind_str}
+                        - {rain_str}"""
+                    embed.add_field(
+                        name=day_phase + f": {weather_info['state']}",
+                        value=info_str,
+                        inline=False,
+                    )
+                embeds.append(embed)
 
-        # create day embeds
-        try:
-            days = self._get_useful_data(request.json(), ctx, lang_preference)
-        except JSONDecodeError:
-            return
-        embeds = []
-        for day in days:
+            # create the last "map" embed
             embed = utils.discord.create_embed(
                 author=ctx.message.author,
-                title=_(ctx, "Weather forecast for _{date}_ in _{place}_").format(
-                    date=day["date"], place=day["nearest_place"]
-                ),
+                title=_(ctx, "Weather map for today"),
             )
-            for day_phase, weather_info in day.items():
-                # skip 'date' and 'nearest_place' strings
-                if type(weather_info) == str:
-                    continue
-                temp_str = _(ctx, "Temperature: **{temp}** ˚C").format(
-                    temp=weather_info["temp"]
-                )
-                feel_str = _(ctx, "Feels like: **{feel}** ˚C").format(
-                    feel=weather_info["feels_like"]
-                )
-                wind_str = _(ctx, "Wind speed: **{speed}** km/h").format(
-                    speed=weather_info["wind_speed"]
-                )
-                rain_str = _(ctx, "Chance of rain: **{chance}** %").format(
-                    chance=weather_info["rain_chance"]
-                )
-                info_str = f"""
-                    - {temp_str}
-                    - {feel_str}
-                    - {wind_str}
-                    - {rain_str}"""
-                embed.add_field(
-                    name=day_phase + f": {weather_info['state']}",
-                    value=info_str,
-                    inline=False,
-                )
-
+            img_url = f"https://v3.wttr.in/{name}.png"
+            embed.set_image(url=img_url)
             embeds.append(embed)
-
-        # create the last "map" embed
-        embed = utils.discord.create_embed(
-            author=ctx.message.author,
-            title=_(ctx, "Weather map for today"),
-        )
-        img_url = f"https://v3.wttr.in/{name}.png"
-        embed.set_image(url=img_url)
-        embeds.append(embed)
-        return embeds
+            return embeds
 
     @commands.guild_only()
     @commands.check(check.acl)
@@ -249,7 +250,7 @@ class Weather(commands.Cog):
             # set bot language as preference
             lang_preference = config.language
 
-        embeds = self._create_embeds(ctx, name, lang_preference)
+        embeds = await self._create_embeds(ctx, name, lang_preference)
         scroll_embed = utils.ScrollableEmbed(ctx, embeds)
         await scroll_embed.scroll()
 
