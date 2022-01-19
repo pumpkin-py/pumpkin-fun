@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, List
 import aiohttp
 
 import nextcord
@@ -6,11 +6,11 @@ from nextcord.ext import commands
 
 import pie.database.config
 from pie import check, i18n, logger, utils
-from pie.i18n.database import GuildLanguage, MemberLanguage
 
 from .database import Place
 
-_ = i18n.Translator("modules/fun").translate
+translator = i18n.Translator("modules/fun")
+_ = translator.translate
 guild_log = logger.Guild.logger()
 config = pie.database.config.Config.get()
 
@@ -31,9 +31,19 @@ class Weather(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
+    def _translate_day_phase(self, ctx: commands.Context, day_phase: str) -> str:
+        if day_phase == "Morning":
+            return _(ctx, "Morning")
+        if day_phase == "Day":
+            return _(ctx, "Day")
+        if day_phase == "Evening":
+            return _(ctx, "Evening")
+        if day_phase == "Night":
+            return _(ctx, "Night")
+
     def _get_useful_data(
-        self, json: dict, ctx: commands.Context, lang_preference: str
-    ) -> list[dict]:
+        self, all_data: dict, ctx: commands.Context, lang_preference: str
+    ) -> List[dict]:
         """
         example json: https://wttr.in/praha?lang=sk&format=j1
         get useful data from json as list of individual days
@@ -41,10 +51,10 @@ class Weather(commands.Cog):
 
         # get individual days to extract data
         weather = []
-        nearest_place = json["nearest_area"][0]["areaName"][0]["value"]
+        nearest_place = all_data["nearest_area"][0]["areaName"][0]["value"]
         lang_preference = f"lang_{lang_preference}"
         for i in range(NUM_OF_FORECAST_DAYS):
-            day = json["weather"][i]
+            day = all_data["weather"][i]
             day_dict = {
                 "date": day["date"],
                 "nearest_place": nearest_place,
@@ -52,36 +62,27 @@ class Weather(commands.Cog):
             day = day["hourly"]
             for day_phase, hour in DAY_PHASES.items():
                 if lang_preference != "lang_en":
-                    day_dict.update(
-                        {
-                            _(ctx, f"{day_phase}"): {
-                                "state": day[hour][lang_preference][0]["value"],
-                                "temp": day[hour]["tempC"],
-                                "feels_like": day[hour]["FeelsLikeC"],
-                                "wind_speed": day[hour]["windspeedKmph"],
-                                "rain_chance": day[hour]["chanceofrain"],
-                            }
-                        }
-                    )
+                    lang_or_desc = lang_preference
                 else:
-                    day_dict.update(
-                        {
-                            _(ctx, f"{day_phase}"): {
-                                "state": day[hour]["weatherDesc"][0]["value"],
-                                "temp": day[hour]["tempC"],
-                                "feels_like": day[hour]["FeelsLikeC"],
-                                "wind_speed": day[hour]["windspeedKmph"],
-                                "rain_chance": day[hour]["chanceofrain"],
-                            }
+                    lang_or_desc = "weatherDesc"
+                day_dict.update(
+                    {
+                        self._translate_day_phase(ctx, day_phase): {
+                            "state": day[hour][lang_or_desc][0]["value"],
+                            "temp": day[hour]["tempC"],
+                            "feels_like": day[hour]["FeelsLikeC"],
+                            "wind_speed": day[hour]["windspeedKmph"],
+                            "rain_chance": day[hour]["chanceofrain"],
                         }
-                    )
+                    }
+                )
 
             weather.append(day_dict)
         return weather
 
     async def _create_embeds(
         self, ctx: commands.Context, name: str, lang_preference: str
-    ) -> list[nextcord.Embed]:
+    ) -> List[nextcord.Embed]:
         """create embeds for scrollable embed"""
         url = f"https://wttr.in/{name}?format=j1&lang={lang_preference}"
         try:
@@ -101,54 +102,54 @@ class Weather(commands.Cog):
                     error=True,
                 )
             ]
-        else:
-            # create day embeds
-            days = self._get_useful_data(resp_json, ctx, lang_preference)
-            embeds = []
-            for day in days:
-                embed = utils.discord.create_embed(
-                    author=ctx.message.author,
-                    title=_(ctx, "Weather forecast for _{date}_ in _{place}_").format(
-                        date=day["date"], place=day["nearest_place"]
-                    ),
-                )
-                for day_phase, weather_info in day.items():
-                    # skip 'date' and 'nearest_place' strings
-                    if type(weather_info) == str:
-                        continue
-                    temp_str = _(ctx, "Temperature: **{temp}** ˚C").format(
-                        temp=weather_info["temp"]
-                    )
-                    feel_str = _(ctx, "Feels like: **{feel}** ˚C").format(
-                        feel=weather_info["feels_like"]
-                    )
-                    wind_str = _(ctx, "Wind speed: **{speed}** km/h").format(
-                        speed=weather_info["wind_speed"]
-                    )
-                    rain_str = _(ctx, "Chance of rain: **{chance}** %").format(
-                        chance=weather_info["rain_chance"]
-                    )
-                    info_str = f"""
-                        - {temp_str}
-                        - {feel_str}
-                        - {wind_str}
-                        - {rain_str}"""
-                    embed.add_field(
-                        name=day_phase + f": {weather_info['state']}",
-                        value=info_str,
-                        inline=False,
-                    )
-                embeds.append(embed)
 
-            # create the last "map" embed
+        # create day embeds
+        days = self._get_useful_data(resp_json, ctx, lang_preference)
+        embeds = []
+        for day in days:
             embed = utils.discord.create_embed(
                 author=ctx.message.author,
-                title=_(ctx, "Weather map for today"),
+                title=_(ctx, "Weather forecast for _{date}_ in _{place}_").format(
+                    date=day["date"], place=day["nearest_place"]
+                ),
             )
-            img_url = f"https://v3.wttr.in/{name}.png"
-            embed.set_image(url=img_url)
+            for day_phase, weather_info in day.items():
+                # skip 'date' and 'nearest_place' strings
+                if type(weather_info) == str:
+                    continue
+                temp_str = _(ctx, "Temperature: **{temp}** ˚C").format(
+                    temp=weather_info["temp"]
+                )
+                feel_str = _(ctx, "Feels like: **{feel}** ˚C").format(
+                    feel=weather_info["feels_like"]
+                )
+                wind_str = _(ctx, "Wind speed: **{speed}** km/h").format(
+                    speed=weather_info["wind_speed"]
+                )
+                rain_str = _(ctx, "Chance of rain: **{chance}** %").format(
+                    chance=weather_info["rain_chance"]
+                )
+                info_str = f"""
+                    - {temp_str}
+                    - {feel_str}
+                    - {wind_str}
+                    - {rain_str}"""
+                embed.add_field(
+                    name=day_phase + f": {weather_info['state']}",
+                    value=info_str,
+                    inline=False,
+                )
             embeds.append(embed)
-            return embeds
+
+        # create the last "map" embed
+        embed = utils.discord.create_embed(
+            author=ctx.message.author,
+            title=_(ctx, "Weather map for today"),
+        )
+        img_url = f"https://v3.wttr.in/{name}.png"
+        embed.set_image(url=img_url)
+        embeds.append(embed)
+        return embeds
 
     @commands.guild_only()
     @commands.check(check.acl)
@@ -230,26 +231,7 @@ class Weather(commands.Cog):
             await ctx.reply(_(ctx, "You have to specify a place or set a preference."))
             return
 
-        # try to get user language preference
-        config = pie.database.config.Config.get()
-        lang_preference = None
-        if ctx.guild is not None:
-            # try to get user preference
-            lang_preference = MemberLanguage.get(
-                guild_id=ctx.guild.id, member_id=ctx.author.id
-            )
-            if lang_preference is not None:
-                lang_preference = getattr(lang_preference, "language", None)
-            else:
-                # try to get guild language preference
-                lang_preference = GuildLanguage.get(guild_id=ctx.guild.id)
-                if lang_preference is not None:
-                    lang_preference = getattr(lang_preference, "language", None)
-
-        if lang_preference is None:
-            # set bot language as preference
-            lang_preference = config.language
-
+        lang_preference = translator.get_language_preference(ctx)
         embeds = await self._create_embeds(ctx, name, lang_preference)
         scroll_embed = utils.ScrollableEmbed(ctx, embeds)
         await scroll_embed.scroll()
