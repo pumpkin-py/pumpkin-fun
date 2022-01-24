@@ -34,7 +34,7 @@ class Meme(commands.Cog):
     @commands.command()
     async def hug(self, ctx, *, user: Union[nextcord.Member, nextcord.Role] = None):
         """Hug someone"""
-        if user is not None and user.id not in [m.id for m in ctx.channel.members]:
+        if not await self._is_user_in_channel(ctx, user):
             await ctx.reply(_(ctx, "You can't do that, they are not in this channel."))
             return
 
@@ -63,12 +63,7 @@ class Meme(commands.Cog):
 
         The user has to highfive you in under twenty seconds.
         """
-        if isinstance(ctx.channel, nextcord.Thread):
-            # in Threads attribute members is not set correctly
-            members = await ctx.channel.fetch_members()
-        else:
-            members = ctx.channel.members
-        if user is not None and user.id not in [m.id for m in members]:
+        if not await self._is_user_in_channel(ctx, user):
             await ctx.reply(_(ctx, "You can't do that, they are not in this channel."))
             return
 
@@ -108,7 +103,7 @@ class Meme(commands.Cog):
     @commands.command()
     async def whip(self, ctx, *, user: nextcord.Member = None):
         """Whip someone"""
-        if user is not None and user.id not in [m.id for m in ctx.channel.members]:
+        if not await self._is_user_in_channel(ctx, user):
             await ctx.reply(_(ctx, "You can't do that, they are not in this channel."))
             return
 
@@ -153,7 +148,7 @@ class Meme(commands.Cog):
     @commands.command()
     async def spank(self, ctx, *, user: nextcord.Member = None):
         """Spank someone"""
-        if user is not None and user.id not in [m.id for m in ctx.channel.members]:
+        if not await self._is_user_in_channel(ctx, user):
             await ctx.reply(_(ctx, "You can't do that, they are not in this channel."))
             return
 
@@ -198,7 +193,7 @@ class Meme(commands.Cog):
     @commands.command()
     async def pet(self, ctx, *, user: nextcord.Member = None):
         """Pet someone"""
-        if user is not None and user.id not in [m.id for m in ctx.channel.members]:
+        if not await self._is_user_in_channel(ctx, user):
             await ctx.reply(_(ctx, "You can't do that, they are not in this channel."))
             return
 
@@ -243,7 +238,7 @@ class Meme(commands.Cog):
     @commands.command()
     async def hyperpet(self, ctx, *, user: nextcord.Member = None):
         """Hyperpet someone"""
-        if user is not None and user.id not in [m.id for m in ctx.channel.members]:
+        if not await self._is_user_in_channel(ctx, user):
             await ctx.reply(_(ctx, "You can't do that, they are not in this channel."))
             return
 
@@ -291,7 +286,7 @@ class Meme(commands.Cog):
 
         member: Discord user. If none, the bot will bonk you.
         """
-        if user is not None and user.id not in [m.id for m in ctx.channel.members]:
+        if not await self._is_user_in_channel(ctx, user):
             await ctx.reply(_(ctx, "You can't do that, they are not in this channel."))
             return
 
@@ -336,7 +331,7 @@ class Meme(commands.Cog):
     @commands.command()
     async def slap(self, ctx, *, user: Union[nextcord.Member, nextcord.Role] = None):
         """Slap someone"""
-        if user is not None and user.id not in [m.id for m in ctx.channel.members]:
+        if not await self._is_user_in_channel(ctx, user):
             await ctx.reply(_(ctx, "You can't do that, they are not in this channel."))
             return
 
@@ -375,7 +370,7 @@ class Meme(commands.Cog):
     @commands.command()
     async def lick(self, ctx, *, user: nextcord.Member = None):
         """Lick someone"""
-        if user is not None and user.id not in [m.id for m in ctx.channel.members]:
+        if not await self._is_user_in_channel(ctx, user):
             await ctx.reply(_(ctx, "You can't do that, they are not in this channel."))
             return
 
@@ -420,7 +415,7 @@ class Meme(commands.Cog):
     @commands.command()
     async def hyperlick(self, ctx, *, user: nextcord.Member = None):
         """Hyperlick someone"""
-        if user is not None and user.id not in [m.id for m in ctx.channel.members]:
+        if not await self._is_user_in_channel(ctx, user):
             await ctx.reply(_(ctx, "You can't do that, they are not in this channel."))
             return
 
@@ -537,6 +532,17 @@ class Meme(commands.Cog):
             f"**{utils.text.sanitise(ctx.author.display_name)}**\n>>> " + text
         )
         await utils.discord.delete_message(ctx.message)
+
+    async def _is_user_in_channel(self, ctx, user: nextcord.Member):
+        if user is None or isinstance(user, nextcord.Role):
+            return True
+
+        if not ctx.channel.members or isinstance(ctx.channel, nextcord.Thread):
+            members = await ctx.channel.fetch_members()
+        else:
+            members = ctx.channel.members
+
+        return user.id in [m.id for m in members]
 
     @staticmethod
     def uwuize(string: str) -> str:
