@@ -11,7 +11,10 @@ _ = i18n.Translator("modules/fun").translate
 guild_log = logger.Guild.logger()
 config = pie.database.config.Config.get()
 
+
 # FIXME: unify with the rest of the repo - missing help, different syntax
+
+
 class Seeking(commands.Cog):
     """Look for... stuff"""
 
