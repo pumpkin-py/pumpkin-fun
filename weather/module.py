@@ -309,7 +309,7 @@ class Weather(commands.Cog):
             if place is not None:
                 name = place.name
         if name is None:
-            await ctx.reply(_(ctx, "You have to specify a place or set a preference."))
+            await ctx.reply(_(ctx, "You have to specify a place or set a prefere nce."))
             return
 
         lang_preference = translator.get_language_preference(ctx)
