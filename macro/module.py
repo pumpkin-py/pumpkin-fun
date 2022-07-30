@@ -1,9 +1,9 @@
-import argparse
 import random
-import shlex
 from collections import defaultdict
-from typing import Any, Dict, Iterable, List, Optional, Generator
+from typing import Any, Dict, List, Literal, Optional, Union, Generator
 
+import discord
+from discord import app_commands
 from discord.ext import commands
 
 from pie import check, i18n, logger, utils
@@ -12,35 +12,6 @@ from .database import TextMacro, MacroMatch
 
 _ = i18n.Translator("modules/fun").translate
 guild_log = logger.Guild.logger()
-
-
-class MacroParser(argparse.ArgumentParser):
-    """Patch ArgumentParser.
-
-    ArgumentParser calls sys.exit(2) on incorrect command,
-    which would take down the bot. This subclass catches the errors
-    and saves them in 'error_message' attribute.
-    """
-
-    error_message: Optional[str] = None
-
-    def error(self, message: str):
-        """Save the error message."""
-        self.error_message = message
-
-    def exit(self):
-        """Make sure the program _does not_ exit."""
-        pass
-
-    def parse_args(self, args: Iterable):
-        """Catch exceptions that do not occur when CLI program exits."""
-        returned = self.parse_known_args(args)
-        try:
-            args, argv = returned
-        except TypeError:
-            # There was an error and it is saved in 'error_message'
-            return None
-        return args
 
 
 class Macro(commands.Cog):
@@ -65,12 +36,11 @@ class Macro(commands.Cog):
 
     #
 
-    @commands.guild_only()
-    @check.acl2(check.ACLevel.SUBMOD)
-    @commands.group(name="macro")
-    async def macro_(self, ctx):
-        """Manage automatic bot replies"""
-        await utils.discord.send_help(ctx)
+    macro_ = app_commands.Group(
+        name="macro",
+        description="Macro management",
+        guild_only=True,
+    )
 
     @check.acl2(check.ACLevel.SUBMOD)
     @macro_.command(name="list")
@@ -164,90 +134,48 @@ class Macro(commands.Cog):
 
         await ctx.reply(embed=embed)
 
-    async def _parse_macro_parameters(
-        self, ctx: commands.Context, parameters: str
-    ) -> Optional[argparse.Namespace]:
-        # Some values are 'type=bool', but are being set to None.
-        # That's because it messed up updating. When you did not want to update them
-        # and omitted them, they ended up overwriting the true intended values in the
-        # database.
-        # We have to filter these in the '_add()' function because of that.
-        parser = MacroParser()
-        parser.add_argument("--triggers", type=str, nargs="+")
-        parser.add_argument("--responses", type=str, nargs="+")
-        parser.add_argument("--dm", type=bool, default=None)
-        parser.add_argument("--delete-trigger", type=bool, default=None)
-        parser.add_argument("--sensitive", type=bool, default=None)
-        parser.add_argument("--match", type=str, choices=[m.name for m in MacroMatch])
-        parser.add_argument("--channels", type=int, nargs="+")
-        parser.add_argument("--users", type=int, nargs="+")
-        args = parser.parse_args(shlex.split(parameters))
-        if parser.error_message:
-            await ctx.reply(
-                _(ctx, "Macro could not be added:")
-                + f"\n> `{parser.error_message.replace('`', '')}`"
-            )
-            return None
-
-        # Ensure that everything is the right data type.
-        # argparse does not have clear way to specify that we want to have lists
-        # of some data types, this is the cleanest way. It does not support
-        # typing.* types, unfortunately.
-        for kw in ("triggers", "responses"):
-            if getattr(args, kw).__class__ is str:
-                setattr(args, kw, [getattr(args, kw)])
-        for kw in ("channels", "users"):
-            if getattr(args, kw).__class__ is int:
-                setattr(args, kw, [getattr(args, kw)])
-            # disable channel/user overwrites by supplying 0
-            if getattr(args, kw) == [0]:
-                setattr(args, kw, [])
-
-        return args
-
     @check.acl2(check.ACLevel.MOD)
     @macro_.command(name="add")
-    async def macro_add(self, ctx, name: str, *, parameters: str):
-        """Add new macro.
-
-        Args:
-            --triggers: Trigger phrases.
-            --responses: Possible answers; one of them will be picked each time.
-            --dm: Whether to send the reply to DM instead of the trigger channel; defaults to False.
-            --delete-trigger: Whether to delete the trigger message; defaults to False.
-            --sensitive: Case-sensitivity; defaults to False.
-            --match: One of FULL, START, END, ANY.
-            --channels: Optional list of channel IDs where this macro will work. Reset by supplying 0.
-            --users: Optional list of user IDs for which this macro wil work. Reset by supplying 0.
-        """
+    @app_commands.describe(
+        name="Macro name",
+        triggers="Strings triggering the macro",
+        responses="Possible responses",
+        private="Whether the response should be only for the user",
+        delete="Whether to delete triggering message",
+        sensitive="Whether the triggers are case-sensitive",
+        match="How to match triggers",
+        channel="Limit the macro to given channels",
+        user="Limit the macro to given users",
+    )
+    async def macro_add(
+        self,
+        ctx,
+        name: str,
+        triggers: str,
+        responses: str,
+        private: bool = False,
+        delete: bool = False,
+        sensitive: bool = False,
+        match: Literal["FULL", "START", "END", "ANY"] = "FULL",
+        channel: Optional[Union[discord.TextChannel, discord.Thread]] = None,
+        user: Optional[discord.User] = None,
+    ):
+        """Add new dynamic reply."""
         if TextMacro.get(guild_id=ctx.guild.id, name=name):
             await ctx.reply(_(ctx, "Macro with that name already exists."))
             return
 
-        args = await self._parse_macro_parameters(ctx, parameters)
-        if args is None:
-            return
-
-        for arg in ("match", "triggers", "responses"):
-            if not getattr(args, arg, None):
-                await ctx.reply(
-                    _(ctx, "Argument --{arg} must be specified.").format(arg=arg)
-                )
-                return
-
         TextMacro.add(
             guild_id=ctx.guild.id,
             name=name,
-            triggers=args.triggers,
-            responses=args.responses,
-            dm=args.dm if args.dm is not None else False,
-            delete_trigger=args.delete_trigger
-            if args.delete_trigger is not None
-            else False,
-            sensitive=args.sensitive if args.sensitive is not None else False,
-            match=getattr(MacroMatch, args.match.upper()),
-            channels=args.channels if args.users.__class__ is int else args.channels,
-            users=[args.users] if args.users.__class__ is int else args.users,
+            triggers=triggers,
+            responses=responses,
+            dm=private,
+            delete_trigger=delete,
+            sensitive=sensitive,
+            match=match,
+            channels=[channel] if channel else [],
+            users=[user] if user else [],
         )
 
         await ctx.reply(_(ctx, "Macro **{name}** created.").format(name=name))
@@ -271,6 +199,8 @@ class Macro(commands.Cog):
             --channels: Optional list of channel IDs where this macro will work. Reset by supplying 0.
             --users: Optional list of user IDs for which this macro wil work. Reset by supplying 0.
         """
+        raise NotImplementedError()
+
         macro = TextMacro.get(guild_id=ctx.guild.id, name=name)
         if not macro:
             await ctx.reply(_(ctx, "Macro with that name does not exist."))

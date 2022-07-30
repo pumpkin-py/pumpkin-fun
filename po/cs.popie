@@ -193,14 +193,8 @@ msgstr Kanály
 msgid Users
 msgstr Uživatelé
 
-msgid Macro could not be added:
-msgstr Makro nemohlo být přidáno:
-
 msgid Macro with that name already exists.
 msgstr Makro s takovým jménem již existuje.
-
-msgid Argument --{arg} must be specified.
-msgstr Musí být uveden argument --{arg}.
 
 msgid Macro **{name}** created.
 msgstr Makro **{name}** vytvořeno.
