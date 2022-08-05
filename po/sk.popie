@@ -314,19 +314,19 @@ msgid This server doesn't have any place preference saved.
 msgstr Tento server nemá nastavené žiadne preferované miesto počasia.
 
 msgid Server's preferred weather place was removed.
-msgstr
+msgstr Preferencia miesta predpovede počasia pre server bola odstránená.
 
 msgid Weather forecast preference
-msgstr
+msgstr Preferencia predpovede počasia
 
 msgid Your preference
-msgstr
+msgstr Tvoja preferencia
 
 msgid *No preference set*
-msgstr
+msgstr *Preferencia nenastavená*
 
 msgid Server preference
-msgstr
+msgstr Preferencie servera
 
 msgid You have to specify a place or set a preference.
 msgstr Musíš zadať miesto alebo si nastaviť preferenciu.
