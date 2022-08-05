@@ -98,7 +98,7 @@ msgid gave / got
 msgstr rozdané / získané
 
 msgid This server has not enabled any variants.
-msgstr Tento server nemá zapnuté žiadne varianty
+msgstr Tento server nemá zapnuté žiadne varianty.
 
 msgid Relation
 msgstr Vzťah
@@ -110,7 +110,7 @@ msgid Variant
 msgstr Varianta
 
 msgid That relation does not exist.
-msgstr Tento vzťah neexistuje
+msgstr Tento vzťah neexistuje.
 
 msgid Relation **{command}** does not have any variant.
 msgstr Vzťah **{command}** nemá žiadnu variantu.
