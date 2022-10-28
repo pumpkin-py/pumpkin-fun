@@ -331,19 +331,17 @@ class Rand(commands.Cog):
 
         async with aiohttp.ClientSession() as session:
             async with session.get(url, headers=headers, params=params) as response:
-                fetched = await response.json()
+                result = await response.json()
 
         if keyword is not None:
-            if fetched["error"]:
+            if result["error"]:
                 return await ctx.reply(_(ctx, "I didn't find a joke like that."))
-            fetched["joke"] = re.sub(
+            result["joke"] = re.sub(
                 f"(\\b\\w*{keyword}\\w*\\b)",
                 r"**\1**",
-                fetched["joke"],
+                result["joke"],
                 flags=re.IGNORECASE,
             )
-        else:
-            result = fetched
 
         embed: discord.Embed = utils.discord.create_embed(
             author=ctx.author,
