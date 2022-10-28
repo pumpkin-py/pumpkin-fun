@@ -309,6 +309,52 @@ class Rand(commands.Cog):
 
         await ctx.reply(embed=embed)
 
+    @commands.cooldown(rate=5, per=60, type=commands.BucketType.channel)
+    @check.acl2(check.ACLevel.EVERYONE)
+    @commands.command()
+    async def joke(self, ctx, *, keyword: Optional[str] = None):
+        """Get random joke
+
+        Arguments
+        ---------
+        keyword: search for a certain keyword in a joke
+        """
+        if keyword is not None and ("&" in keyword or "?" in keyword):
+            return await ctx.reply(_(ctx, "I didn't find a joke like that."))
+
+        params: Dict[str, str] = {"limit": "30"}
+        url: str = "https://v2.jokeapi.dev/joke/Any"
+        params["type"] = "single"
+        if keyword is not None:
+            params["contains"] = keyword
+        headers: Dict[str, str] = {"Accept": "application/json"}
+
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url, headers=headers, params=params) as response:
+                fetched = await response.json()
+
+        if keyword is not None:
+            res = fetched["results"]
+            if len(res) == 0:
+                return await ctx.reply(_(ctx, "I didn't find a joke like that."))
+            result = random.choice(res)
+            result["joke"] = re.sub(
+                f"(\\b\\w*{keyword}\\w*\\b)",
+                r"**\1**",
+                result["joke"],
+                flags=re.IGNORECASE,
+            )
+        else:
+            result = fetched
+
+        embed: discord.Embed = utils.discord.create_embed(
+            author=ctx.author,
+            description=result["joke"],
+            footer="jokeapi.dev",
+        )
+
+        await ctx.reply(embed=embed)
+
 
 async def setup(bot) -> None:
     await bot.add_cog(Rand(bot))
