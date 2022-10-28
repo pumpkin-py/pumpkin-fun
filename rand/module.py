@@ -1,3 +1,4 @@
+import urllib
 import aiohttp
 import random
 import re
@@ -322,11 +323,11 @@ class Rand(commands.Cog):
         if keyword is not None and ("&" in keyword or "?" in keyword):
             return await ctx.reply(_(ctx, "I didn't find a joke like that."))
 
-        params: Dict[str, str] = {"limit": "30"}
+        params: Dict[str, str]
         url: str = "https://v2.jokeapi.dev/joke/Any"
         params["type"] = "single"
         if keyword is not None:
-            params["contains"] = keyword
+            params["contains"] = urllib.parse.quote(keyword.encode('utf8'))
         headers: Dict[str, str] = {"Accept": "application/json"}
 
         async with aiohttp.ClientSession() as session:
@@ -334,14 +335,12 @@ class Rand(commands.Cog):
                 fetched = await response.json()
 
         if keyword is not None:
-            res = fetched["results"]
-            if len(res) == 0:
+            if fetched["error"]:
                 return await ctx.reply(_(ctx, "I didn't find a joke like that."))
-            result = random.choice(res)
-            result["joke"] = re.sub(
+            fetched["joke"] = re.sub(
                 f"(\\b\\w*{keyword}\\w*\\b)",
                 r"**\1**",
-                result["joke"],
+                fetched["joke"],
                 flags=re.IGNORECASE,
             )
         else:
