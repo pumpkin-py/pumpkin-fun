@@ -323,9 +323,8 @@ class Rand(commands.Cog):
         if keyword is not None and ("&" in keyword or "?" in keyword):
             return await ctx.reply(_(ctx, "I didn't find a joke like that."))
 
-        params: Dict[str, str]
+        params: Dict[str, str] = {"type": "single"}
         url: str = "https://v2.jokeapi.dev/joke/Any"
-        params["type"] = "single"
         if keyword is not None:
             params["contains"] = urllib.parse.quote(keyword.encode('utf8'))
         headers: Dict[str, str] = {"Accept": "application/json"}
