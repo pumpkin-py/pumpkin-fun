@@ -2,14 +2,15 @@ import contextlib
 
 from discord.ext import commands
 
-import pie.database.config
-from pie import check, i18n, logger, utils
+import pumpkin.database.config
+from pumpkin import check, i18n, logger, utils
 
+import pumpkin_fun
 from .database import Seeking as SeekingDB
 
-_ = i18n.Translator("modules/fun").translate
+_ = i18n.Translator(pumpkin_fun).translate
 guild_log = logger.Guild.logger()
-config = pie.database.config.Config.get()
+config = pumpkin.database.config.Config.get()
 
 
 # FIXME: unify with the rest of the repo - missing help, different syntax

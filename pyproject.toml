@@ -1,0 +1,34 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pumpkin_fun"
+description = "Fun module for the pumpkin.py bot"
+version = "0.0.0"
+license = {file = "LICENSE"}
+requires-python = ">=3.8"
+keywords =["discord", "bot"]
+authors = []
+dependencies = [
+	"numpy",
+	"Pillow",
+	"dhash",
+	"python-dateutil",
+	"aiohttp",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[project.optional-dependencies]
+dev = [
+	"pre-commit",
+	"black==22.12.0", "flake8", "flake8-print", "flake8-todo",
+	"bandit",
+	"pytest",
+	"pumpkin-tools @ git+https://github.com/pumpkin-py/pumpkin-tools.git"
+]
+
+[project.entry-points."pumpkin.repos"]
+fun = "pumpkin_fun:repo"

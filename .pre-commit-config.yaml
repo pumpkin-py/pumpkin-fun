@@ -16,9 +16,3 @@ repos:
     rev: '5.0.4'
     hooks:
     - id: flake8
-
-  - repo: https://github.com/pumpkin-py/pumpkin-tools
-    rev: v1.9.0
-    hooks:
-    - id: popie
-      args: [--detached]

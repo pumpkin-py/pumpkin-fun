@@ -4,7 +4,7 @@ from typing import Optional
 
 from sqlalchemy import Column, Integer, BigInteger
 
-from pie.database import database, session
+from pumpkin.database import database, session
 
 
 class Price(database.base):

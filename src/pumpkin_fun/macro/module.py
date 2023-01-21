@@ -6,11 +6,12 @@ from typing import Any, Dict, Iterable, List, Optional, Generator
 
 from discord.ext import commands
 
-from pie import check, i18n, logger, utils
+from pumpkin import check, i18n, logger, utils
 
+import pumpkin_fun
 from .database import TextMacro, MacroMatch
 
-_ = i18n.Translator("modules/fun").translate
+_ = i18n.Translator(pumpkin_fun).translate
 guild_log = logger.Guild.logger()
 
 

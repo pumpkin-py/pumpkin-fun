@@ -9,10 +9,12 @@ from PIL import Image
 import discord
 from discord.ext import commands
 
-from pie import utils, i18n, logger, check
+from pumpkin import utils, i18n, logger, check
+
+import pumpkin_fun
 from .database import HashChannel, ImageHash, HashConfig
 
-_ = i18n.Translator("modules/fun").translate
+_ = i18n.Translator(pumpkin_fun).translate
 guild_log = logger.Guild.logger()
 bot_log = logger.Bot.logger()
 
@@ -576,11 +578,11 @@ class Dhash(commands.Cog):
         gtx = i18n.TranslationContext(message.guild.id, None)
 
         if distance <= LIMIT_FULL:
-            level = _(gtx, "**♻ This is repost!**")
+            level = _(gtx, "**{recycle} This is repost!**").format(recycle="♻")
         elif distance <= LIMIT_HARD:
-            level = _(gtx, "**♻ This is probably repost!**")
+            level = _(gtx, "**{recycle} This is probably repost!**").format(recycle="♻")
         else:
-            level = _(gtx, "🤷🏻 This could be repost.")
+            level = _(gtx, "{shrug} This could be repost.").format(shrug="🤷🏻")
 
         await message.add_reaction("♻")
 
@@ -616,10 +618,12 @@ class Dhash(commands.Cog):
             name=_(gtx, "Hint"),
             value=_(
                 gtx,
-                "_If image is repost, give it ♻️ reaction. "
-                "If it's not, click here on ❎ and when we reach {limit} reactions, "
+                "_If image is repost, give it {recycle} reaction. "
+                "If it's not, click here on {cross} and when we reach {limit} reactions, "
                 "this message will be deleted._",
             ).format(
+                recycle="♻️",
+                cross="❎",
                 limit=HashChannel.get(
                     message.guild.id, message.channel.id
                 ).reaction_limit,

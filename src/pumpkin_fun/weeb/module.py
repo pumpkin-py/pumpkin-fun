@@ -5,9 +5,11 @@ import discord
 from discord.ext import commands
 from discord.abc import PrivateChannel
 
-from pie import check, utils, i18n
+from pumpkin import check, utils, i18n
 
-_ = i18n.Translator("modules/fun").translate
+import pumpkin_fun
+
+_ = i18n.Translator(pumpkin_fun).translate
 
 
 class Weeb(commands.Cog):

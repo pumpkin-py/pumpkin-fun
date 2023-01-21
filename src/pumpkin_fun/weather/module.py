@@ -7,16 +7,16 @@ import ring
 import discord
 from discord.ext import commands
 
-import pie.database.config
-from pie import check, i18n, logger, utils
+import pumpkin.database.config
+from pumpkin import check, i18n, logger, utils
 
+import pumpkin_fun
 from .database import Place
 from .process import filter_forecast_data, get_day_minmax
 
-translator = i18n.Translator("modules/fun")
-_ = translator.translate
+_ = i18n.Translator(pumpkin_fun).translate
 guild_log = logger.Guild.logger()
-config = pie.database.config.Config.get()
+config = pumpkin.database.config.Config.get()
 bot_log = logger.Bot.logger()
 
 
@@ -145,12 +145,13 @@ class Weather(commands.Cog):
             minmax = get_day_minmax(day_data)
             minmax_temp = minmax["air_temperature"]
             if minmax_temp[0] == minmax_temp[1]:
-                title = _(ctx, "{date}: {upper} ˚C").format(
-                    date=title_date, upper=minmax_temp[0]
-                )
+                title = f"{title_date}: {minmax_temp[0]} ˚C"
             else:
-                title = _(ctx, "{date}: {lower} to {upper} ˚C").format(
-                    date=title_date, lower=minmax_temp[0], upper=minmax_temp[1]
+                title = _(ctx, "{date}: {lower} to {upper} {deg}").format(
+                    date=title_date,
+                    lower=minmax_temp[0],
+                    upper=minmax_temp[1],
+                    deg="˚C",
                 )
 
             embed = utils.discord.create_embed(
@@ -166,14 +167,15 @@ class Weather(commands.Cog):
                 temperature: str
                 if phase_data["air_temperature"][0] != phase_data["air_temperature"][1]:
                     temperature = _(
-                        ctx, "Temperature: **{lower} to {upper} ˚C**"
+                        ctx, "Temperature: **{lower} to {upper} {deg}**"
                     ).format(
                         lower=phase_data["air_temperature"][0],
                         upper=phase_data["air_temperature"][1],
+                        deg="˚C",
                     )
                 else:
-                    temperature = _(ctx, "Temperature: **{upper} ˚C**").format(
-                        upper=phase_data["air_temperature"][1],
+                    temperature = _(ctx, "Temperature: **{upper} {deg}**").format(
+                        upper=phase_data["air_temperature"][1], deg="˚C"
                     )
 
                 value = (

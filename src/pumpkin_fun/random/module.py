@@ -8,12 +8,14 @@ from typing import Optional, List, Dict
 import discord
 from discord.ext import commands
 
-from pie import check, utils, i18n
+from pumpkin import check, utils, i18n
 
-_ = i18n.Translator("modules/fun").translate
+import pumpkin_fun
+
+_ = i18n.Translator(pumpkin_fun).translate
 
 
-class Rand(commands.Cog):
+class Random(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
@@ -239,9 +241,7 @@ class Rand(commands.Cog):
         """Get random image of a duck"""
         headers = self._get_request_headers()
         async with aiohttp.ClientSession(headers=headers) as session:
-            async with session.get(
-                "https://random-d.uk/api/v2/random"
-            ) as response:
+            async with session.get("https://random-d.uk/api/v2/random") as response:
                 if response.status != 200:
                     return await ctx.reply(
                         _(ctx, "Command encountered an error (E{code}).").format(
@@ -405,4 +405,4 @@ class Rand(commands.Cog):
 
 
 async def setup(bot) -> None:
-    await bot.add_cog(Rand(bot))
+    await bot.add_cog(Random(bot))

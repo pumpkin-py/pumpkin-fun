@@ -12,14 +12,15 @@ from PIL import Image, ImageDraw, ImageFont
 import discord
 from discord.ext import commands
 
-import pie.database.config
-from pie import check, logger, utils, i18n
+import pumpkin.config.database
+from pumpkin import check, logger, utils, i18n
 
+import pumpkin_fun
 from .database import Relation, RelationOverwrite
 from .image_utils import ImageUtils
 
-_ = i18n.Translator("modules/fun").translate
-config = pie.database.config.Config.get()
+_ = i18n.Translator(pumpkin_fun).translate
+config = pumpkin.config.database.Config.get()
 bot_log = logger.Bot.logger()
 guild_log = logger.Guild.logger()
 

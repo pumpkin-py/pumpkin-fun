@@ -4,7 +4,7 @@ from typing import List, Optional
 
 from sqlalchemy import BigInteger, Column, Integer, String
 
-from pie.database import database, session
+from pumpkin.database import database, session
 
 
 class Seeking(database.base):

@@ -7,9 +7,10 @@ from urllib import parse as url_parse
 
 from discord.ext import commands
 
-from pie import check, utils, i18n
+from pumpkin import check, utils, i18n
+import pumpkin_fun
 
-_ = i18n.Translator("modules/fun").translate
+_ = i18n.Translator(pumpkin_fun).translate
 
 
 class UrbanItem:

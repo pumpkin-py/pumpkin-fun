@@ -1,27 +1,24 @@
 import discord
 from discord.ext import commands
 
-from pie import check, utils, i18n, logger
-from modules.base.admin.database import BaseAdminModule
-from modules.boards.karma.database import KarmaMember
+from pumpkin import check, utils, i18n, logger
+from pumpkin_boards.karma.database import KarmaMember
 
+import pumpkin_fun
 from .database import Price
 
-_ = i18n.Translator("modules/fun").translate
+_ = i18n.Translator(pumpkin_fun).translate
 bot_log = logger.Bot.logger()
 guild_log = logger.Guild.logger()
+
+
+# FIXME This module needs to be updated before it can be used
 
 
 class Names(commands.Cog):
     """Buy nickname changes for karma points."""
 
     def __init__(self, bot: commands.Bot):
-        # Check if dependency module is loaded.
-        if not BaseAdminModule.get("boards.karma").enabled:
-            raise Exception(
-                "Unable to load names module due to missing module `boards.karma`."
-            )
-
         self.bot = bot
 
     @commands.bot_has_permissions(manage_nicknames=True)

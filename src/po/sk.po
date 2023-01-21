@@ -1,0 +1,459 @@
+msgid ""
+msgstr ""
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-01-15 19:03+0100\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "You asked a question, but did not add enough options."
+msgstr "Opýtal si sa otázku, ale nemám na výber dostatok možností."
+
+msgid "Yes"
+msgstr "Áno"
+
+msgid "No"
+msgstr "Nie"
+
+msgid "Command encountered an error (E{code})."
+msgstr "Príkaz narazil na chybu (E{code})."
+
+msgid "Cat fact"
+msgstr "Fakt o mačkách"
+
+msgid "Dog fact"
+msgstr "Fakt o psoch"
+
+msgid "Description"
+msgstr "Popis"
+
+msgid "I didn't find a joke like that."
+msgstr "Takýto vtip sa nenašiel."
+
+msgid "Characters"
+msgstr "Znaky"
+
+msgid "Parodies"
+msgstr "Paródie"
+
+msgid "Tags"
+msgstr "Tagy"
+
+msgid "Artists"
+msgstr "Umelci"
+
+msgid "Groups"
+msgstr "Skupiny"
+
+msgid "Languages"
+msgstr "Jazyky"
+
+msgid "Categories"
+msgstr "Kategórie"
+
+msgid "Number of pages"
+msgstr "Počet strán"
+
+msgid "Supply me with a magic number and I will give you what you desire"
+msgstr "Dodaj mi kúzelné číslo a ja ti dám, čo si praješ."
+
+msgid "Regex for allowed URLs is `{regex}`."
+msgstr "Regex pre povolené URL je `{regex}`."
+
+msgid "Regex for allowed URLs is not set."
+msgstr "Regex pre povolené URL nie je nastavený."
+
+msgid "Regex for allowed urls successfuly unset."
+msgstr "Regex pre povolené adresy úspešne zrušený."
+
+msgid "String `{regex}` is not valid regex."
+msgstr "Reťazec `{regex}` nie je validný regex."
+
+msgid "String `{regex}` was successfuly set as allowed urls."
+msgstr "Reťazec pre povolené URL adresy bol nastavený na `{regex}`."
+
+msgid "{channel} is already hash channel."
+msgstr "Kanál {channel} je už nastavený ako hash kanál."
+
+msgid "Channel {channel} added as hash channel with reaction limit **{reaction_limit}**."
+msgstr "Kanál {channel} bol pridaný ako hash kanál s limitom **{reaction_limit}** reakcií."
+
+msgid "{channel} is not hash channel."
+msgstr "Kanál {channel} nie je hash kanál."
+
+msgid "Reaction limit must be higher than 0."
+msgstr "Limit reakcií musí byť vyšší než 0."
+
+msgid "Changed reaction limit for {channel} to **{reaction_limit}**."
+msgstr "V kanáli {channel} bol zmenený limit reakcií na **{reaction_limit}**."
+
+msgid "This server has no hash channels."
+msgstr "Tento server nemá žiadne hash kanály."
+
+msgid "Hash channel {channel} removed."
+msgstr "Hash kanál {channel} bol odstránený."
+
+msgid "**LOADING**"
+msgstr "**NAČÍTAVANIE**"
+
+msgid "Downloaded **{count}** messages."
+msgstr "Stiahnutých bolo **{count}** správ."
+
+msgid "**SCANNING**"
+msgstr "**SKENOVÁNÍ**"
+
+msgid "Processed **{count}** out of **{total}** messages ({percent} %)."
+msgstr "Spracovanie **{count}** z **{total}** správ ({percent} %)."
+
+msgid "Calculated **{hashes}** hashes."
+msgstr "Vypočítaných **{hashes}** hashov."
+
+msgid "**COMPLETED**"
+msgstr "**HOTOVO**"
+
+msgid "Processed **{messages}** messages."
+msgstr "Spracovné **{messages}** správ."
+
+msgid "Calculated **{hashes}** image hashes in **{seconds}** seconds."
+msgstr "Vypočítaných **{hashes}** hashov za **{seconds}** sekúnd."
+
+msgid "Message **`{message_id}`**"
+msgstr "Správa **`{message_id}`**"
+
+msgid "Messages has no associtated hashes."
+msgstr "K správam nepatria žiadne hashe."
+
+msgid "**{recycle} This is repost!**"
+msgstr "**{recycle} Toto je repost!**"
+
+msgid "**{recycle} This is probably repost!**"
+msgstr "**{recycle} Toto je pravdepodobne repost!**"
+
+msgid "{shrug} This could be repost."
+msgstr "{shrug} Toto môže byť repost."
+
+msgid "{name}, matching **{similarity}**!"
+msgstr "{name}, zhoda **{similarity}**!"
+
+msgid "Original"
+msgstr "Originál"
+
+msgid "Hint"
+msgstr "Nápoveda"
+
+msgid "_If image is repost, give it {recycle} reaction. If it's not, click here on {cross} and when we reach {limit} reactions, this message will be deleted._"
+msgstr "_Pokiaľ je obrázok repost, daj mu reakciu {recycle}. Ak nie je repost, klikni na {cross} a keď sa dosiahne limit {limit} reakcií, táto správa bude odstránená._"
+
+msgid "You can't do that, they are not in this channel."
+msgstr "To robiť nemôžeš, nie sú v tomto kanáli."
+
+msgid "**{user}** did not highfive you back on time in #{channel}."
+msgstr "Užívateľ **{user}** ti v kanáli #{channel} nestihol na highfive odpovedať."
+
+msgid "Relations {name}"
+msgstr "Vzťahy {name}"
+
+msgid "gave / got"
+msgstr "rozdané / získané"
+
+msgid "This server has not enabled any variants."
+msgstr "Tento server nemá zapnuté žiadne varianty."
+
+msgid "Relation"
+msgstr "Vzťah"
+
+msgid "Channel"
+msgstr "Kanál"
+
+msgid "Variant"
+msgstr "Varianta"
+
+msgid "That relation does not exist."
+msgstr "Tento vzťah neexistuje."
+
+msgid "Relation **{command}** does not have any variant."
+msgstr "Vzťah **{command}** nemá žiadnu variantu."
+
+msgid "Relation **{command}** has following variants:"
+msgstr "Vzťah **{command}** má ansledujúce varianty:"
+
+msgid "That relation does not have this variant."
+msgstr "Tento vzťah nemá variantu."
+
+msgid "Variant for **{command}** in **#{channel}** set to **{variant}**."
+msgstr "Varianta pre **{command}** v **#{channel}** nastavená na **{variant}**."
+
+msgid "Relations {name}: {action}"
+msgstr "Vzťahy {name}: {action}"
+
+msgid "Relation statistics: {gave} given, {got} received."
+msgstr "Štatistika vzťahu: {gave} rozdané, {got} získané."
+
+msgid "Unknown user"
+msgstr "Neznámy používateľ"
+
+msgid "Given"
+msgstr "Rozdané"
+
+msgid "Nothing given"
+msgstr "Nič nebolo rozdané"
+
+msgid "No data available."
+msgstr "Žiadne dáta."
+
+msgid "Received"
+msgstr "Prijato"
+
+msgid "Nothing received"
+msgstr "Nič nebolo prijaté"
+
+msgid "This server does not have defined any macros."
+msgstr "Tento server nemá žiadne makrá."
+
+msgid "Macro name"
+msgstr "Názov makra"
+
+msgid "Match"
+msgstr "Zhoda"
+
+msgid "Invocations"
+msgstr "Spustenie"
+
+msgid "Triggers"
+msgstr "Spúšťače"
+
+msgid "Macro with that name does not exist."
+msgstr "Makro s takým menom neexistuje."
+
+msgid "Macro details: {name}"
+msgstr "Detaily o makre: {name}"
+
+msgid "This macro was run {count} times in total."
+msgstr "Toto makro bolo celkom spustené {count}-krát."
+
+msgid "Responses"
+msgstr "Odpovede"
+
+msgid "Case sensitive"
+msgstr "Rozlíšenie veľkosti písmen"
+
+msgid "Forward to DM"
+msgstr "Preposlať do DM"
+
+msgid "Delete the trigger"
+msgstr "Zmazať spúšťač"
+
+msgid "Extra"
+msgstr "Extra"
+
+msgid "Channels"
+msgstr "Kanály"
+
+msgid "Users"
+msgstr "Užívatelia"
+
+msgid "Macro could not be added:"
+msgstr "Makro nemohlo byť pridané:"
+
+msgid "Macro with that name already exists."
+msgstr "Makro s takým menom už existuje."
+
+msgid "Argument --{arg} must be specified."
+msgstr "Musí byť uvedený argument --{arg}."
+
+msgid "Macro **{name}** created."
+msgstr "Makro **{name}** vytvorené."
+
+msgid "No arguments specified."
+msgstr "Neboli uvedené žiadne argumenty."
+
+msgid "Macro **{name}** updated."
+msgstr "Makro **{name}** aktualizované."
+
+msgid "Macro **{name}** removed."
+msgstr "Makro **{name}** vymazané."
+
+msgid "Nickname change prices"
+msgstr ""
+
+msgid "Values are in karma points."
+msgstr ""
+
+msgid "Set"
+msgstr ""
+
+msgid "not set"
+msgstr ""
+
+msgid "Reset"
+msgstr ""
+
+msgid "Cannot change nickname because module karma is not loaded."
+msgstr ""
+
+msgid "That nickname is same as current nickname."
+msgstr ""
+
+msgid "That nickname is forbidden keyword."
+msgstr ""
+
+msgid "That nickname includes some forbidden characters."
+msgstr ""
+
+msgid "The length of a nickname must be between 2 and 32 characters."
+msgstr ""
+
+msgid "Unable to change nickname, **set** price not configured."
+msgstr ""
+
+msgid "No enough karma, try to chat more to earn karma."
+msgstr ""
+
+msgid "Cannot change nickname because you have greater privileges."
+msgstr ""
+
+msgid "Congratulations, you have been renamed to **{nickname}**."
+msgstr ""
+
+msgid "Cannot change nickname because mudule karma is not loaded."
+msgstr ""
+
+msgid "Unable to change nickname, **unset** price not configured."
+msgstr ""
+
+msgid "You have no nickname here."
+msgstr ""
+
+msgid "Congratulations, your nickname has been removed."
+msgstr ""
+
+msgid "Set nor reset price cannot be negative."
+msgstr ""
+
+msgid "Prices have been successfully updated."
+msgstr ""
+
+msgid "Prices have not been successfully updated."
+msgstr ""
+
+msgid "No items found."
+msgstr "Nenašli sa žiadne položky."
+
+msgid "Seeking"
+msgstr "Hľadám"
+
+msgid "Unknown User"
+msgstr "Neznámy užívateľ"
+
+msgid "The text is too long, the limit is 140 characters."
+msgstr "Text je príliš dlhý, limit je 140 znakov."
+
+msgid "The item was added as #{idx}."
+msgstr "Položka bola pridaná ako #{idx}."
+
+msgid "Item #{idx} does not exist."
+msgstr "Položka #{idx} neexistuje."
+
+msgid "You don't have permission to remove #{idx}."
+msgstr "Nemáš oprávnenie na odstránenie #{idx}."
+
+msgid "The item was deleted."
+msgstr "Položka bola odstránená."
+
+msgid "All items were deleted."
+msgstr "Všetky položky boli odstránené."
+
+msgid "Night"
+msgstr "Noc"
+
+msgid "Morning"
+msgstr "Ráno"
+
+msgid "Afternoon"
+msgstr ""
+
+msgid "Evening"
+msgstr "Večer"
+
+msgid "Today"
+msgstr ""
+
+msgid "Tomorrow"
+msgstr ""
+
+msgid "{date}: {lower} to {upper} {deg}"
+msgstr ""
+
+msgid "Weather forecast for **{place}, {country}**"
+msgstr ""
+
+msgid "Temperature: **{lower} to {upper} {deg}**"
+msgstr ""
+
+msgid "Temperature: **{upper} {deg}**"
+msgstr ""
+
+msgid "Clouds: **{valmax} %**"
+msgstr ""
+
+msgid "Relative humidity: **{valmax} %**"
+msgstr ""
+
+msgid "Fogginess: **{valmax}**"
+msgstr ""
+
+msgid "*Air pressure: {valmin} to {valmax} hPa*"
+msgstr ""
+
+msgid "*Wind speed: up to {valmax} m/s*"
+msgstr ""
+
+msgid "*UV index: up to {valmax}*"
+msgstr ""
+
+msgid "*Extra information*"
+msgstr ""
+
+msgid "That's not valid place name."
+msgstr "Tento názov miesta nieje platný."
+
+msgid "Your preferred weather place set to **{place}**."
+msgstr "Tvoje preferované miesto na počasie bolo nastavené na **{place}**."
+
+msgid "You don't have any place preference saved."
+msgstr "Nemáš nastavené žiadne preferované miesto počasia."
+
+msgid "Your preferred weather place was removed."
+msgstr "Tvoje preferované miesto počasia bolo zmazané."
+
+msgid "Server's preferred weather place set to **{place}**."
+msgstr "Preferencia miesta predpovedi počasia pre server bola nastavená na **{place}**."
+
+msgid "This server doesn't have any place preference saved."
+msgstr "Tento server nemá nastavené žiadne preferované miesto počasia."
+
+msgid "Server's preferred weather place was removed."
+msgstr "Preferencia miesta predpovede počasia pre server bola odstránená."
+
+msgid "Weather forecast preference"
+msgstr "Preferencia predpovede počasia"
+
+msgid "Your preference"
+msgstr "Tvoja preferencia"
+
+msgid "*No preference set*"
+msgstr "*Preferencia nenastavená*"
+
+msgid "Server preference"
+msgstr "Preferencie servera"
+
+msgid "You have to specify a place or set a preference."
+msgstr "Musíš zadať miesto alebo si nastaviť preferenciu."
+
+msgid "Submitted place could not be found."
+msgstr ""
+
+msgid "Forecast server refused the geolocation."
+msgstr ""
+
+msgid "Ask me what you want to know and I will answer."
+msgstr "Opýtaj sa ma čo chceš vedieť a ja ti odpoviem."
