@@ -173,12 +173,13 @@ class Fun(commands.Cog):
                 frames[0].save(
                     image_binary,
                     format="GIF",
+                    interlace=True,
                     save_all=True,
                     append_images=frames[1:],
                     duration=30,
                     loop=0,
-                    transparency=0,
                     disposal=2,
+                    background=255,
                     optimize=False,
                 )
                 image_binary.seek(0)
@@ -226,12 +227,13 @@ class Fun(commands.Cog):
                 frames[0].save(
                     image_binary,
                     format="GIF",
+                    interlace=True,
                     save_all=True,
                     append_images=frames[1:],
                     duration=frame_duration,
                     loop=0,
-                    transparency=0,
                     disposal=2,
+                    background=255,
                     optimize=False,
                 )
                 image_binary.seek(0)
@@ -268,12 +270,13 @@ class Fun(commands.Cog):
                 frames[0].save(
                     image_binary,
                     format="GIF",
+                    interlace=True,
                     save_all=True,
                     append_images=frames[1:],
                     duration=40,
                     loop=0,
-                    transparency=0,
                     disposal=2,
+                    background=255,
                     optimize=False,
                 )
                 image_binary.seek(0)
@@ -310,12 +313,13 @@ class Fun(commands.Cog):
                 frames[0].save(
                     image_binary,
                     format="GIF",
+                    interlace=True,
                     save_all=True,
                     append_images=frames[1:],
                     duration=30,
                     loop=0,
-                    transparency=0,
                     disposal=2,
+                    background=255,
                     optimize=False,
                 )
                 image_binary.seek(0)
@@ -355,12 +359,13 @@ class Fun(commands.Cog):
                 frames[0].save(
                     image_binary,
                     format="GIF",
+                    interlace=True,
                     save_all=True,
                     append_images=frames[1:],
                     duration=30,
                     loop=0,
-                    transparency=0,
                     disposal=2,
+                    background=255,
                     optimize=False,
                 )
                 image_binary.seek(0)
@@ -437,12 +442,13 @@ class Fun(commands.Cog):
                 frames[0].save(
                     image_binary,
                     format="GIF",
+                    interlace=True,
                     save_all=True,
                     append_images=frames[1:],
                     duration=30,
                     loop=0,
-                    transparency=0,
                     disposal=2,
+                    background=255,
                     optimize=False,
                 )
                 image_binary.seek(0)
@@ -479,12 +485,13 @@ class Fun(commands.Cog):
                 frames[0].save(
                     image_binary,
                     format="GIF",
+                    interlace=True,
                     save_all=True,
                     append_images=frames[1:],
                     duration=30,
                     loop=0,
-                    transparency=0,
                     disposal=2,
+                    background=255,
                     optimize=False,
                 )
                 image_binary.seek(0)
@@ -791,7 +798,7 @@ class Fun(commands.Cog):
 
         for i in range(14):
             img = "%02d" % (i + 1)
-            frame = Image.new("RGBA", (width, height), (54, 57, 63, 1))
+            frame = Image.new("RGBA", (width, height), (0, 0, 0, 0))
             frame_object = Image.open(DATA_DIR / f"pet/{img}.png")
             frame.paste(frame_avatar, (35, 25 + vertical_offset[i]), frame_avatar)
             frame.paste(frame_object, (10, 5), frame_object)
@@ -817,7 +824,7 @@ class Fun(commands.Cog):
             )
             frame_object = Image.open(DATA_DIR / f"hyperpet/{img}.png")
 
-            frame = Image.new("RGBA", (width, height), (54, 57, 63, 1))
+            frame = Image.new("RGBA", (width, height), (0, 0, 0, 0))
             frame.paste(frame_avatar, (35, 25 + vertical_offset[i]), frame_avatar)
             frame.paste(frame_object, (10, 5), frame_object)
             frames.append(frame)
@@ -838,7 +845,7 @@ class Fun(commands.Cog):
             frame_avatar = avatar.resize((100, 100 - deformation[i]))
             frame_object = Image.open(DATA_DIR / f"bonk/{img}.png")
 
-            frame = Image.new("RGBA", (width, height), (54, 57, 63, 1))
+            frame = Image.new("RGBA", (width, height), (0, 0, 0, 0))
             frame.paste(frame_avatar, (80, 60 + deformation[i]), frame_avatar)
             frame.paste(frame_object, (10, 5), frame_object)
             frames.append(frame)
@@ -860,7 +867,7 @@ class Fun(commands.Cog):
             frame_avatar = avatar.resize((100 - deformation[i], 100))
             frame_object = Image.open(DATA_DIR / f"whip/{img}.png").resize((150, 150))
 
-            frame = Image.new("RGBA", (width, height), (54, 57, 63, 1))
+            frame = Image.new("RGBA", (width, height), (0, 0, 0, 0))
             frame.paste(
                 frame_avatar, (135 + deformation[i] + translation[i], 25), frame_avatar
             )
@@ -885,7 +892,7 @@ class Fun(commands.Cog):
             )
             frame_object = Image.open(DATA_DIR / f"spank/{img}.png").resize((100, 100))
 
-            frame = Image.new("RGBA", (width, height), (54, 57, 63, 1))
+            frame = Image.new("RGBA", (width, height), (0, 0, 0, 0))
             frame.paste(frame_object, (10, 15), frame_object)
             frame.paste(
                 frame_avatar, (80 - deformation[i], 10 - deformation[i]), frame_avatar
@@ -915,7 +922,7 @@ class Fun(commands.Cog):
             frame_object = Image.open(DATA_DIR / f"spank_figures/{img}.png")
             frame_source_avatar = source_avatar.resize((64, 64))
             frame_target_avatar = rotated_avatar.resize((64, 64))
-            frame = Image.new("RGBA", (width, height), (54, 57, 63, 1))
+            frame = Image.new("RGBA", (width, height), (0, 0, 0, 0))
 
             frame.paste(
                 frame_target_avatar,
@@ -951,7 +958,7 @@ class Fun(commands.Cog):
             frame_avatar = avatar.resize((64, 64))
             frame_object = Image.open(DATA_DIR / f"lick/{img}.png")
 
-            frame = Image.new("RGBA", (width, height), (54, 57, 63, 1))
+            frame = Image.new("RGBA", (width, height), (0, 0, 0, 0))
             frame.paste(frame_object, (10, 15), frame_object)
             frame.paste(frame_avatar, (198 + voffset[i], 68 + hoffset[i]), frame_avatar)
             frames.append(frame)
@@ -977,7 +984,7 @@ class Fun(commands.Cog):
             )
             frame_object = Image.open(DATA_DIR / f"lick/{img}.png")
 
-            frame = Image.new("RGBA", (width, height), (54, 57, 63, 1))
+            frame = Image.new("RGBA", (width, height), (0, 0, 0, 0))
             frame.paste(frame_object, (10, 15), frame_object)
             frame.paste(frame_avatar, (198 + voffset[i], 68 + hoffset[i]), frame_avatar)
             frames.append(frame)
